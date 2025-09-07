@@ -1,8 +1,12 @@
+import os
 import pandas as pd
 import requests
 import time
 
-API_KEY = 'YOUR_API_KEY'  # ←取得したAPIキーをここに記入
+API_KEY = os.environ.get('MY_GEOCODING_API_KEY')
+if API_KEY is None:
+    print("Error: Please set the MY_GEOCODING_API_KEY environment variable.")
+    exit(1)
 
 def get_latlon(address, api_key):
     url = f'https://maps.googleapis.com/maps/api/geocode/json'
