@@ -3,7 +3,7 @@
 """
 import re
 
-address_line_re = re.compile(r"^\s*(\d+)\s+(.+)\s+(\d{3}-\d{4})\s(.*)\s\d{3,4}-")
+address_line_re = re.compile(r"^\s*(\d+)\s+(.+)\s+(\d{3}-\d{4})\s(.*)\s\d{2,4}-")
 
 output_lines = []
 
@@ -15,8 +15,10 @@ with open("members.txt", "r", encoding='utf-8') as file:
             member_name = match.group(2)
             post_code = match.group(3)
             address = match.group(4)
-            print(f"ID: {member_id}, Name: {member_name}, Post Code: {post_code}, Address: {address}")
+            # print(f"ID: {member_id}, Name: {member_name}, Post Code: {post_code}, Address: {address}")
             output_lines.append([member_id, member_name, post_code, address])
+        else:
+            print(f"Line did not match: {line}")
 
 with open("members.csv", "w", encoding='cp932') as file:
     for line in output_lines:
