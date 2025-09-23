@@ -1,0 +1,2 @@
+# Ignore the evironment file which defines PYTHONPATH for local execution
+.env
