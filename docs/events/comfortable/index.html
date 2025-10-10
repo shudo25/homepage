@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <title>気楽に集まる会</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>慰労金・支援金について</title>
+    <link rel="stylesheet" href="../../common/copy-button.css">
   <style type="text/css">
     img.middle { vertical-align: middle; }
     .opacity-2 {opacity: 0.2;}
@@ -69,15 +71,33 @@
     例えば、次のように申請してください。
 </pre>
 
-<div style="position: relative; display: inline-block;">
 <table border="1" cellpadding="5" cellspacing="0" id="email-template" style="margin: 0;">
-<!-- テーブル内容とスクリプトは省略 -->
-</table>
-<button onclick="copyEmailTemplate()" style="position: absolute; top: 2px; right: 2px; background-color: #4CAF50; color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-size: 11px; z-index: 10;">⧉ Copy</button>
-</div>
+<tr><td><pre>
+宛先アドレス： shudo25support@googlegroups.com
+件名： 支援金適用企画案
 
+運営委員各位
+
+下記の内容で企画していますので、
+運営ルールに従って支援金の適用を申請します。
+
+　　　記
+
+・ 予定人数： ４～７名（うち同期生４名）
+・ 予定時期： 2025年４月
+・ 企画内容： 人類存亡の危機を味わう激辛ラーメン会食ツアー
+・ 企画代表者： 修道凡助
+
+以上、よろしくお願いします。
+</pre></td></tr>
+</table>
+
+<script src="../../common/copy-button.js"></script>
 <script>
-<!-- スクリプト内容は省略 -->
+// ページ読み込み後にコピーボタンを追加
+document.addEventListener('DOMContentLoaded', function() {
+    createCopyButton('email-template');
+});
 </script>
 </div>
 <div class="requirements">

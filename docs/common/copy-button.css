@@ -1,0 +1,27 @@
+.copy-container {
+    position: relative;
+    display: inline-block;
+}
+
+.copy-button {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 6px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 11px;
+    z-index: 10;
+    transition: background-color 0.3s;
+}
+
+.copy-button:hover {
+    background-color: #45a049;
+}
+
+.copy-button.success {
+    background-color: #45a049;
+}
