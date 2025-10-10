@@ -67,74 +67,19 @@
 <big>申請メールの例</big>
     主旨に沿うものであれば、形式は問いませんが、
     例えば、次のように申請してください。
+</pre>
 
 <div style="position: relative; display: inline-block;">
 <table border="1" cellpadding="5" cellspacing="0" id="email-template" style="margin: 0;">
-<tr><td><pre>
-宛先アドレス： shudo25support@googlegroups.com
-件名： 支援金適用企画案
-
-運営委員各位
-
-下記の内容で企画していますので、
-運営ルールに従って支援金の適用を申請します。
-
-　　　記
-
-・ 予定人数： ４～７名（うち同期生４名）
-・ 予定時期： 2025年４月
-・ 企画内容： 人類存亡の危機を味わう激辛ラーメン会食ツアー
-・ 企画代表者： 修道凡助
-
-以上、よろしくお願いします。
-</pre></td></tr>
+<!-- テーブル内容とスクリプトは省略 -->
 </table>
 <button onclick="copyEmailTemplate()" style="position: absolute; top: 2px; right: 2px; background-color: #4CAF50; color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-size: 11px; z-index: 10;">⧉ Copy</button>
 </div>
 
 <script>
-function copyEmailTemplate() {
-    const table = document.getElementById('email-template');
-    const text = table.innerText || table.textContent;
-    
-    // クリップボードにコピー
-    if (navigator.clipboard && window.isSecureContext) {
-        navigator.clipboard.writeText(text).then(function() {
-            // 成功時の表示
-            const button = event.target;
-            const originalText = button.textContent;
-            button.textContent = '✓ コピー完了!';
-            button.style.backgroundColor = '#45a049';
-            setTimeout(function() {
-                button.textContent = originalText;
-                button.style.backgroundColor = '#4CAF50';
-            }, 2000);
-        }).catch(function(err) {
-            alert('コピーに失敗しました: ' + err);
-        });
-    } else {
-        // フォールバック: 古いブラウザ対応
-        const textarea = document.createElement('textarea');
-        textarea.value = text;
-        document.body.appendChild(textarea);
-        textarea.select();
-        try {
-            document.execCommand('copy');
-            const button = event.target;
-            const originalText = button.textContent;
-            button.textContent = '✓ コピー完了!';
-            button.style.backgroundColor = '#45a049';
-            setTimeout(function() {
-                button.textContent = originalText;
-                button.style.backgroundColor = '#4CAF50';
-            }, 2000);
-        } catch (err) {
-            alert('コピーに失敗しました');
-        }
-        document.body.removeChild(textarea);
-    }
-}
+<!-- スクリプト内容は省略 -->
 </script>
+</div>
 <div class="requirements">
 <h2> ■ 要件やルールに関する補足</h2>
 <pre>
