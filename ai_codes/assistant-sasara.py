@@ -5,7 +5,7 @@ from ceviopy.cevio import Cevio
 import speech_recognition as sr
 import openai
 
-client = openai.OpenAI(api_key=os.environ.get("HOSTESS_SASARA"))
+client = openai.OpenAI(api_key=os.environ.get("ASSISTANT_SASARA"))
 print("OpenAI API Key:", "設定済み" if client.api_key else "未設定")
 
 def recognize_google():

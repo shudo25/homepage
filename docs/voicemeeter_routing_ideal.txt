@@ -1,0 +1,55 @@
+Voicemeeter・Zoom・CeVIO・Pythonスクリプト間の理想的なルーティング図
+
+──────────────────────────────
+【1. 物理・仮想デバイスの役割】
+
+- Zoom：会議アプリ（マイク入力・スピーカー出力）
+- CeVIO：AI音声合成（スピーカー出力）
+- Pythonスクリプト：音声認識（マイク入力）・合成音声再生
+- VB-Audio Cable：仮想オーディオケーブル（CABLE Input/Output）
+
+──────────────────────────────
+【2. Voicemeeterの設定例】
+
+■ Hardware Input 1：物理マイク（あなたの声）
+■ Hardware Input 2：CABLE Output（ZoomやPC音声の取り込み用）
+■ Virtual Input：PCのシステム音声（CeVIOの出力もここに流す）
+
+■ A1：物理スピーカー/ヘッドホン（あなたが聞く用）
+■ B1：Voicemeeter Virtual Output（Zoomのマイクとして選択）
+■ B2：CABLE Input（Pythonスクリプトのマイクとして選択）
+
+──────────────────────────────
+【3. ルーティング例】
+
+- あなたの声（物理マイク）→ Hardware Input 1 → B1（Zoomへ）＋A1（自分で聞く）
+- CeVIOの音声出力 → Voicemeeter Virtual Input → B1（Zoomへ）＋A1（自分で聞く）
+- Zoomの音声出力 → CABLE Output → Hardware Input 2 → A1（自分で聞く）＋B2（Pythonスクリプトへ）
+- Pythonスクリプトの音声認識入力 → CABLE Input（B2からの音声を認識）
+
+──────────────────────────────
+【4. Zoom・CeVIO・Pythonの設定】
+
+- Zoomのマイク：Voicemeeter Output（B1）
+- Zoomのスピーカー：CABLE Input（CABLE Output経由でVoicemeeterに戻す）
+- CeVIOの出力デバイス：Voicemeeter Input
+- Pythonスクリプトのマイク：CABLE Input
+
+──────────────────────────────
+【5. テキスト図（簡易フロー）】
+
+[物理マイク] ─┬─> [Voicemeeter Hardware Input 1] ──┬─> [B1: Voicemeeter Output] ──> [Zoomマイク]
+　　　　　　│　　　　　　　　　　　　　　　　│
+　　　　　　│　　　　　　　　　　　　　　　　└─> [A1: スピーカー/ヘッドホン]
+　　　　　　│
+[CeVIO出力] ─> [Voicemeeter Virtual Input] ─────┘
+　　　　　　　　　　　　　　　　　　　　　　　　　　│
+　　　　　　　　　　　　　　　　　　　　　　　　　　└─> [A1: スピーカー/ヘッドホン]
+
+[Zoomスピーカー] → [CABLE Output] → [Voicemeeter Hardware Input 2] ──┬─> [A1: スピーカー/ヘッドホン]
+　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　└─> [B2: CABLE Input] → [Pythonスクリプト認識]
+
+──────────────────────────────
+
+この構成で、Zoom・CeVIO・Pythonスクリプト間の音声が理想的にルーティングされます。
+もし図解（画像）が必要な場合は、上記テキストをもとに作成できますのでご相談ください。
