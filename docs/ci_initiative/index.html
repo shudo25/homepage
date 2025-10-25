@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CI構想 目次</title>
+  <link rel="stylesheet" href="../common/responsive.css">
+  <style>
+    .flex-container {
+      display: flex;
+      flex-direction: row;
+  /* コメントとbody外のdivを削除 */
+      margin-top: 2em;
+    }
+    .flex-left {
+      flex: 1 1 0;
+      min-width: 250px;
+      max-width: 480px;
+    }
+    .flex-right {
+      flex: 1 1 0;
+      min-width: 220px;
+      max-width: 400px;
+    }
+    @media (max-width: 800px) {
+      .flex-container {
+        flex-direction: column;
+        gap: 1em;
+      }
+      .flex-left, .flex-right {
+        max-width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1 style="text-align:center;">CI構想 目次</h1>
+  <div class="flex-container">
+    <div class="flex-left">
+      <figure style="text-align:center;">
+        <img src="figs/agent-memory.png" alt="Pretrained knowledge, Agent memory, Context window の関係図" style="max-width:100%;height:auto;">
+        <figcaption style="font-size:0.95em;">Pretrained knowledge・Agent memory・Context window の関係図</figcaption>
+      </figure>
+    </div>
+    <div class="flex-right">
+      <ul>
+        <li><a href="overview.html">CI構想 概要</a></li>
+        <li><a href="../md_viewer.html?md=ci_initiative/ci_terminology_jp.md">用語集（日本語）</a></li>
+        <li><a href="../md_viewer.html?md=ci_initiative/ci_terminology_en.md">用語集（英語）</a></li>
+      </ul>
+    </div>
+  </div>
+  <div style="text-align:center; margin:2em 0 1em 0;">
+    <a href="../index.html">← トップページに戻る</a>
+  </div>
+</body>
+</html>

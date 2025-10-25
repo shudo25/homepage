@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Markdown Viewer</title>
+  <link rel="stylesheet" href="common/responsive.css">
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <style>
+    body { max-width: 800px; margin: 2em auto; font-family: sans-serif; }
+    #preview { border: 1px solid #ccc; padding: 1em; background: #fafafa; }
+    table, th, td { border: 1px solid #ccc; border-collapse: collapse; }
+    th, td { padding: 0.5em; }
+  </style>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-RTPZT180CP"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-RTPZT180CP');
+  </script>
+</head>
+<body>
+  <div id="preview">Loading...</div>
+  <script src="common/wrap-toggle.js"></script>
+  <script>
+    function getMarkdownFile() {
+      const params = new URLSearchParams(window.location.search);
+      return params.get('md') || 'README.md';
+    }
+    fetch(getMarkdownFile())
+      .then(response => response.text())
+      .then(md => {
+        document.getElementById('preview').innerHTML = marked.parse(md);
+      })
+      .catch(() => {
+        document.getElementById('preview').innerHTML = 'Markdownファイルの読み込みに失敗しました。';
+      });
+  </script>
+</body>
+</html>
