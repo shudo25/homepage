@@ -1,12 +1,19 @@
 # ささらの音声・Zoom環境設定
-from ceviopy.cevio import Cevio
 from utils.audio_utils import get_device_index_by_name
 import speech_recognition as sr
 
 # CeVIO TTSエンジン
+class CevioDummy:
+    def speak(self, text):
+        print(f"CeVIOが発声: {text}")
 
 def get_tts_engine():
-    return Cevio(mode="AI")
+    try:
+        from ceviopy.cevio import Cevio
+        return Cevio(mode="AI")
+    except ImportError:
+        print("CeVIO Pyがインストールされていません。TTSエンジンを利用できません。")
+        return CevioDummy()
 
 # Zoom仮想マイクインデックス取得
 _VIRTUAL_MIC_DEVICE_NAMES = {
