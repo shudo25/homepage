@@ -6,3 +6,6 @@
 
 # Python cache files
 __pycache__/
+
+# Ignore model files
+vosk-model-small-ja-0.22/
