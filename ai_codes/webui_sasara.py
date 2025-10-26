@@ -17,11 +17,11 @@ HTML = '''
 <head>
 <title>ささら指示入力</title>
 <script>
-// 入力欄にフォーカスがなければ1秒ごと自動リロード
-let lastFocus = false;
+// 入力欄にフォーカスがなく、かつテキスト選択中でなければ1秒ごと自動リロード
 setInterval(function() {
     var input = document.getElementById('sasara_input');
-    if (input && document.activeElement !== input) {
+    var sel = window.getSelection ? window.getSelection().toString() : '';
+    if (input && document.activeElement !== input && !sel) {
         location.reload();
     }
 }, 1000);
@@ -56,9 +56,21 @@ setInterval(function() {
         </div>
     {% endif %}
 </div>
-<form method=post>
+<form method=post style="margin-bottom:0.5em;">
     <input id="sasara_input" name=text size=60 autofocus>
     <input type=submit value="送信">
+</form>
+<form method=post style="display:inline;">
+    <input type=hidden name=text value="ささらさん発言">
+    <input type=submit value="ささらさん発言" style="background:#cfc;">
+</form>
+<form method=post style="display:inline;">
+    <input type=hidden name=text value="ささらさん終了">
+    <input type=submit value="ささらさん終了" style="background:#fcc;">
+</form>
+<form method=post style="display:inline;">
+    <input type=hidden name=text value="参加終了">
+    <input type=submit value="参加終了" style="background:#ccc;">
 </form>
 {% if msg %}<p style="color:green">送信しました: {{msg}}</p>{% endif %}
 <hr>

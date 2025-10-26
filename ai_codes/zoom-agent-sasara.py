@@ -1,3 +1,13 @@
+# --- 状態切り替えキーワード ---
+to_speaking_keywords = ["ささらさんどうぞ", "ささらさん答えて", "ささらさん発言", "sasara speak"]
+to_listening_keywords = ["ささらさんどうも", "ささらさんありがとう", "ささらさん終了", "sasara stop"]
+# --- 会議設定 ---
+meeting_config = {
+    "title": "定例会議",
+    "participants": ["ささら", "田中一郎", "鈴木花子"],
+    "use_polite_speech": True  # 年配者向け敬語
+}
+
 import sys
 sys.path.insert(0, r'E:\GitHub\CeVIOPy')
 import speech_recognition as sr
@@ -29,9 +39,13 @@ last_reply_texts = []  # 最新3件まで
 def main():
     global sasara_status, last_heard_text, last_reply_text
     # 文脈説明を最初に与える
+    # 会議設定をsystem_promptに反映
+    polite_note = "。今回の会議参加者は年配の方が多いので、丁寧な言葉遣い（敬語）で話してください。" if meeting_config["use_polite_speech"] else ""
+    participants_note = f"本会議の参加者: {', '.join(meeting_config['participants'])}。"
+    dynamic_system_prompt = system_prompt + "\n" + participants_note + polite_note
     context_info = "まず最初に、あなた自身（さとうささら）として一言だけ簡単に自己紹介してください。"
     messages = [
-        {"role": "system", "content": system_prompt},
+        {"role": "system", "content": dynamic_system_prompt},
         {"role": "user", "content": context_info}
     ]
     # LLMに自己紹介をさせて発話
@@ -60,7 +74,7 @@ def main():
             user_text = recognize_with_silence_detection(mic, phrase_time_limit=3, max_silence_count=2, max_total_duration=30)
             if user_text:
                 last_heard_texts.append(user_text)
-                if len(last_heard_texts) > 3:
+                if len(last_heard_texts) > 10:
                     last_heard_texts[:] = last_heard_texts[-3:]
                 webui_sasara.last_heard_texts = last_heard_texts
             input_queue.put(("audio", user_text))
@@ -75,25 +89,35 @@ def main():
             if src == "audio":
                 print("[音声認識失敗] うまく聞き取れませんでした。")
             continue
+        # 参加終了ボタン受信時はスクリプトを安全に終了
+        if user_text.strip() == "参加終了":
+            print("[システム] 参加終了指示を受信したため、スクリプトを終了します。")
+            os._exit(0)
         if src == "text":
             print(f"[テキスト指示] {user_text}")
         else:
             print(f"[音声入力] {user_text}")
         messages.append({"role": "user", "content": user_text})
-        # 発言状態に遷移
-        sasara_status = "speaking"
-        webui_sasara.sasara_status = sasara_status
-        reply = chatgpt_response(client, messages)
-        print("ささら応答:", reply)
-        last_reply_texts.append(reply)
-        if len(last_reply_texts) > 3:
-            last_reply_texts[:] = last_reply_texts[-3:]
-        webui_sasara.last_reply_texts = last_reply_texts
-        t.speak(reply)
-        messages.append({"role": "assistant", "content": reply})
-        # 応答後は黙って聞いている状態に戻す
-        sasara_status = "listening"
-        webui_sasara.sasara_status = sasara_status
+        # 明示的なキーワードで状態を切り替え
+        if any(kw in user_text for kw in to_speaking_keywords):
+            sasara_status = "speaking"
+            webui_sasara.sasara_status = sasara_status
+            print("[状態切替] → 応答中 (speaking)")
+        elif any(kw in user_text for kw in to_listening_keywords):
+            sasara_status = "listening"
+            webui_sasara.sasara_status = sasara_status
+            print("[状態切替] → 会議を聞いている (listening)")
+
+        if sasara_status == "speaking":
+            reply = chatgpt_response(client, messages)
+            print("ささら応答:", reply)
+            last_reply_texts.append(reply)
+            if len(last_reply_texts) > 3:
+                last_reply_texts[:] = last_reply_texts[-3:]
+            webui_sasara.last_reply_texts = last_reply_texts
+            t.speak(reply)
+            messages.append({"role": "assistant", "content": reply})
+            # 応答後は自動でlisteningに戻さない（明示指示でのみ切替）
 
 if __name__ == "__main__":
     main()
