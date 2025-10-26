@@ -11,7 +11,7 @@ meeting_config = {
 import sys
 sys.path.insert(0, r'E:\GitHub\CeVIOPy')
 import speech_recognition as sr
-from characters.sasara_person import system_prompt, get_openai_client
+from characters.sasara_person import get_system_prompt, get_openai_client
 from characters.sasara_voice import get_tts_engine, get_microphone
 import os
 from time import sleep
@@ -38,17 +38,34 @@ last_reply_texts = []  # 最新3件まで
 
 def main():
     global sasara_status, last_heard_text, last_reply_text
-    # 文脈説明を最初に与える
+
     # 会議設定をsystem_promptに反映
     polite_note = "。今回の会議参加者は年配の方が多いので、丁寧な言葉遣い（敬語）で話してください。" if meeting_config["use_polite_speech"] else ""
     participants_note = f"本会議の参加者: {', '.join(meeting_config['participants'])}。"
-    dynamic_system_prompt = system_prompt + "\n" + participants_note + polite_note
+    dynamic_system_prompt = get_system_prompt() + "\n" + participants_note + polite_note
+
+    # --- プロトコル理解確認ステップ ---
+    from characters.sasara_person import admin_protocol_check_message
+    # --- プロトコル内容をuserメッセージにも明示的に含める ---
+    protocol_content = get_system_prompt()
+    protocol_enforce_message = (
+        admin_protocol_check_message +
+        "\n\n【プロトコル原文】\n" + protocol_content +
+        "\n必ず上記プロトコル（systemメッセージで与えたルール）に厳密に従ってください。"
+    )
+    check_messages = [
+        {"role": "system", "content": dynamic_system_prompt},
+        {"role": "user", "content": protocol_enforce_message}
+    ]
+    check_reply = chatgpt_response(client, check_messages)
+    print("[プロトコル理解確認]", check_reply)
+
+    # 通常の会話開始
     context_info = "まず最初に、あなた自身（さとうささら）として一言だけ簡単に自己紹介してください。"
     messages = [
         {"role": "system", "content": dynamic_system_prompt},
         {"role": "user", "content": context_info}
     ]
-    # LLMに自己紹介をさせて発話
     intro_reply = chatgpt_response(client, messages)
     print("ささら自己紹介:", intro_reply)
     t.speak(intro_reply)
@@ -115,7 +132,12 @@ def main():
             if len(last_reply_texts) > 3:
                 last_reply_texts[:] = last_reply_texts[-3:]
             webui_sasara.last_reply_texts = last_reply_texts
-            t.speak(reply)
+            # --- 『『ADMIN: ... 』』形式ならZoom発声せず管理者UIに転送 ---
+            if reply.startswith("『『ADMIN:") and reply.endswith("』』"):
+                print("[管理者介入要請] 管理者UIに転送:", reply)
+                # 必要に応じてwebui_sasaraで専用リストに追加するなど拡張可
+            else:
+                t.speak(reply)
             messages.append({"role": "assistant", "content": reply})
             # 応答後は自動でlisteningに戻さない（明示指示でのみ切替）
 

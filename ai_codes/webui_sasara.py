@@ -7,8 +7,11 @@ import queue
 input_queue = None  # 実際はmain側から渡す
 sasara_status = "listening"  # "listening"=黙って聞いている, "speaking"=応答中
 last_heard_texts = []
+
 last_reply_texts = []
 command_log = []  # 指示履歴
+# 管理者用非公開交信メッセージ履歴
+admin_msgs = []
 
 app = Flask(__name__)
 
@@ -74,6 +77,12 @@ setInterval(function() {
 </form>
 {% if msg %}<p style="color:green">送信しました: {{msg}}</p>{% endif %}
 <hr>
+<h4 style="color:#900;">管理者用 非公開交信</h4>
+<div style="max-height:120px;overflow:auto;background:#fee;padding:0.5em;">
+    {% for msg in admin_msgs[::-1] %}
+        <div style="font-size:90%;color:#900;">{{msg}}</div>
+    {% endfor %}
+</div>
 <h4>指示ログ</h4>
 <div style="max-height:200px;overflow:auto;background:#f8f8f8;padding:0.5em;">
     {% for cmd in log %}
@@ -84,8 +93,16 @@ setInterval(function() {
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    global sasara_status, last_heard_texts, last_reply_texts, command_log
+    global sasara_status, last_heard_texts, last_reply_texts, command_log, admin_msgs
     msg = None
+    # 直近の応答内容から『『ADMIN: ... 』』形式を抽出してadmin_msgsに追加
+    if last_reply_texts:
+        last = last_reply_texts[-1]
+        if isinstance(last, str) and last.startswith("『『ADMIN:") and last.endswith("』』"):
+            if (not admin_msgs) or (admin_msgs and last != admin_msgs[-1]):
+                admin_msgs.append(last)
+                if len(admin_msgs) > 10:
+                    admin_msgs = admin_msgs[-10:]
     if request.method == 'POST':
         text = request.form.get('text', '').strip()
         if text and input_queue is not None:
@@ -96,8 +113,8 @@ def index():
                 command_log = command_log[-20:]
         # Post/Redirect/Get: 送信後はGETでリダイレクト
         return redirect(url_for('index'))
-    # 状態・直近聞き取り・直近応答・指示ログをテンプレートに渡す
-    return render_template_string(HTML, msg=msg, status=sasara_status, last_heard_texts=last_heard_texts, last_reply_texts=last_reply_texts, log=command_log)
+    # 状態・直近聞き取り・直近応答・指示ログ・非公開交信をテンプレートに渡す
+    return render_template_string(HTML, msg=msg, status=sasara_status, last_heard_texts=last_heard_texts, last_reply_texts=last_reply_texts, log=command_log, admin_msgs=admin_msgs)
 
 if __name__ == '__main__':
     # テスト用: 単体で動かす場合はローカルキューを使う
