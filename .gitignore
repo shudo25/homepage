@@ -3,3 +3,6 @@
 
 # Ignore PowerPoint files
 *.pptx
+
+# Python cache files
+__pycache__/

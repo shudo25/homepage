@@ -1,63 +1,41 @@
 import sys
 sys.path.insert(0, r'E:\GitHub\CeVIOPy')
 import speech_recognition as sr
-import openai
-from ceviopy.cevio import Cevio
+from characters.sasara_person import system_prompt, get_openai_client
+from characters.sasara_voice import get_tts_engine, get_microphone
 import os
 from time import sleep
 
-# OpenAI APIキー
-client = openai.OpenAI(api_key=os.environ.get("ASSISTANT_SASARA"))
+client = get_openai_client()
 
 # CeVIO初期化
-t = Cevio(mode="AI")
+t = get_tts_engine()
+# マイクインスタンス生成
+mic = get_microphone('B3')
 
-# 仮想マイクのデバイスインデックスを調べて指定
-VIRTUAL_MIC_INDEX = 34 # Voicemeeter Out B1 (VB-Audio Voicemeeter VAIO)
-mic = sr.Microphone(device_index=VIRTUAL_MIC_INDEX)  # ←ここを環境に合わせて設定
-
-def recognize_from_virtual_mic():
-    recognizer = sr.Recognizer()
-    with mic as source:
-        print("Zoom経由の音声を認識中...")
-        recognizer.adjust_for_ambient_noise(source, duration=3)
-        audio = recognizer.listen(source, timeout=None, phrase_time_limit=15)
-    # デバッグ用に音声を保存
-    import datetime
-    ts = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-    wav_path = f"debug_audio_{ts}.wav"
-    with open(wav_path, "wb") as f:
-        f.write(audio.get_wav_data())
-    print(f"録音音声を {wav_path} に保存しました。")
-    try:
-        text = recognizer.recognize_google(audio, language="ja-JP")
-        print("認識結果:", text)
-        return text
-    except Exception as e:
-        print("認識失敗:", e)
-        return ""
-
-def chatgpt_response(messages):
-    response = client.chat.completions.create(
-        model="gpt-3.5-turbo",
-        messages=messages,
-        max_tokens=300,
-        temperature=0.7,
-    )
-    return response.choices[0].message.content.strip()
-
-system_prompt = "あなたはバーチャル司会者『さとうささら』です。..."  # assistant-sasara.pyの内容を流用
+# utils配下からimport
+from utils.recognition_utils import recognize_from_virtual_mic
+from utils.openai_utils import chatgpt_response
 
 def main():
-    messages = [{"role": "system", "content": system_prompt}]
+    # 文脈説明を最初に与える
+    context_info = "（例）あなたはZoom会議の司会者です。参加者はAさんとBさんです。今日はイベントの進行役をお願いします。"
+    messages = [
+        {"role": "system", "content": system_prompt},
+        {"role": "user", "content": context_info}
+    ]
+    # 文脈説明を音声で発話
+    t.speak(context_info)
+    sleep(0.5)
+    # 通常の会話ループ
     while True:
-        user_text = recognize_from_virtual_mic()
+        user_text = recognize_from_virtual_mic(mic, save_debug_wav=False)
         if not user_text:
             t.speak("うまく聞き取れませんでした。もう一度お願いします。")
             sleep(0.5)
             continue
         messages.append({"role": "user", "content": user_text})
-        reply = chatgpt_response(messages)
+        reply = chatgpt_response(client, messages)
         print("ささら応答:", reply)
         t.speak(reply)
         messages.append({"role": "assistant", "content": reply})
