@@ -38,16 +38,21 @@ setInterval(function() {
     </span>
 </div>
 <div style="margin-bottom:1em;">
-    {% if last_heard_texts %}
-        <div style="background:#eef;padding:0.5em;margin-bottom:0.3em;">
-            <b>直近の聞き取り内容:</b>
-            <ul style="margin:0 0 0 1.2em;padding:0;">
-                {% for txt in last_heard_texts[::-1] %}
-                    <li style="font-size:90%">{{txt}}</li>
-                {% endfor %}
-            </ul>
-        </div>
-    {% endif %}
+    <div style="background:#eef;padding:0.5em;margin-bottom:0.3em;">
+        <b>直近の聞き取り内容:</b>
+        <ul style="margin:0 0 0 1.2em;padding:0;">
+            {% for txt in last_heard_texts[::-1] %}
+                <li style="font-size:90%">{{txt}}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div style="background:#ffd;padding:0.5em;margin-bottom:0.3em;">
+        <b>音声認識結果（編集して送信可）:</b><br>
+        <form method="post" style="margin-bottom:0.5em;">
+            <textarea name="edited_text" rows="2" cols="60">{% if last_heard_texts %}{{ last_heard_texts[-1] }}{% endif %}</textarea>
+            <input type="submit" value="編集内容をささらに送信" style="background:#eef;">
+        </form>
+    </div>
     {% if last_reply_texts %}
         <div style="background:#ffe;padding:0.5em;">
             <b>直近の応答内容:</b>
@@ -104,13 +109,25 @@ def index():
                 if len(admin_msgs) > 10:
                     admin_msgs = admin_msgs[-10:]
     if request.method == 'POST':
+        # 通常指示フォーム
         text = request.form.get('text', '').strip()
-        if text and input_queue is not None:
-            input_queue.put(("text", text))
-            command_log.append(text)
-            # ログは最新20件まで
-            if len(command_log) > 20:
-                command_log = command_log[-20:]
+        # 音声認識編集フォーム
+        edited_text = request.form.get('edited_text', '').strip()
+        sent = False
+        if edited_text:
+            if input_queue is not None:
+                input_queue.put(("text", edited_text))
+                command_log.append("[編集送信] " + edited_text)
+                if len(command_log) > 20:
+                    command_log = command_log[-20:]
+                sent = True
+        elif text:
+            if input_queue is not None:
+                input_queue.put(("text", text))
+                command_log.append(text)
+                if len(command_log) > 20:
+                    command_log = command_log[-20:]
+                sent = True
         # Post/Redirect/Get: 送信後はGETでリダイレクト
         return redirect(url_for('index'))
     # 状態・直近聞き取り・直近応答・指示ログ・非公開交信をテンプレートに渡す
