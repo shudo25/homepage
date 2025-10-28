@@ -30,7 +30,9 @@ def get_virtual_mic_index(bus='B3'):
     names = _VIRTUAL_MIC_DEVICE_NAMES.get(bus)
     if not names:
         raise ValueError(f"未対応のバス: {bus}")
-    return get_device_index_by_name(names)
+    idx = get_device_index_by_name(names)
+    print(f"仮想マイクデバイスインデックス({bus}): {idx}")
+    return idx
 
 # マイクインスタンス生成
 
