@@ -32,6 +32,13 @@ socket.on('asr_update', function(data) {
 </script>
 </head>
 <h2>ささらさんへの指示</h2>
+<div style="margin-bottom:1em;background:#eef;padding:0.5em;">
+    <b>デバッグ用音声入力:</b>
+    <form method="post" style="display:inline;">
+        <input type="text" name="debug_audio" size="50" placeholder="ここにテキストを入力し送信するとマイク入力扱いになります">
+        <input type="submit" value="デバッグ音声送信" style="background:#cce;">
+    </form>
+</div>
 <div style="margin-bottom:1em;">
     <div style="background:#ffd;padding:0.5em;margin-bottom:0.3em;">
         <b>音声認識結果（編集して送信可）:</b><br>
@@ -50,8 +57,8 @@ socket.on('asr_update', function(data) {
     <input type=submit value="ささらさん終了" style="background:#fcc;">
 </form>
 <form method=post style="display:inline;">
-    <input type=hidden name=text value="参加終了">
-    <input type=submit value="参加終了" style="background:#ccc;">
+    <input type=hidden name=text value="退出">
+    <input type=submit value="退出" style="background:#ccc;">
 </form>
 {% if msg %}<p style="color:green">送信しました: {{msg}}</p>{% endif %}
 <hr>
@@ -94,7 +101,17 @@ def index():
     if request.method == 'POST':
         edited_text = request.form.get('edited_text', '').strip()
         text = request.form.get('text', '').strip()
+        debug_audio = request.form.get('debug_audio', '').strip()
         sent = False
+        if debug_audio:
+            # デバッグ用音声入力をマイク入力扱いでput
+            if input_queue is not None:
+                input_queue.put(("audio", debug_audio))
+                command_log.append("[デバッグ音声] " + debug_audio)
+                if len(command_log) > 20:
+                    command_log = command_log[-20:]
+                sent = True
+            return redirect(url_for('index'))
         if edited_text:
             if input_queue is not None:
                 input_queue.put(("text", edited_text))

@@ -106,9 +106,9 @@ def main():
             if src == "audio":
                 print("[音声認識失敗] うまく聞き取れませんでした。")
             continue
-        # 参加終了ボタン受信時はスクリプトを安全に終了
-        if user_text.strip() == "参加終了":
-            print("[システム] 参加終了指示を受信したため、スクリプトを終了します。")
+        # 退出ボタン受信時はスクリプトを安全に終了
+        if user_text.strip() == "退出":
+            print("[システム] 退出指示を受信したため、スクリプトを終了します。")
             os._exit(0)
         if src == "text":
             print(f"[テキスト指示] {user_text}")
