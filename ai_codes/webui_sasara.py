@@ -60,6 +60,13 @@ function clearAsr() {
 </style>
 <div class="container-flex">
     <div class="left-col">
+        <div class="block" style="background:#e0ffe0;">
+            <span class="block-title">ささらに直接発声させる:</span><br>
+            <form method="post" style="margin-bottom:0.5em; display:block;">
+                <textarea name="direct_tts" rows="10" cols="48" style="width:100%;max-width:100%;box-sizing:border-box;" placeholder="この内容をAIを介さず即発声"></textarea>
+                <input type="submit" value="直接発声" style="background:#bff;min-width:120px;margin-top:0.5em;">
+            </form>
+        </div>
         <div class="block" style="background:#eef;">
             <span class="block-title">デバッグ用音声入力:</span><br>
             <form method="post" style="display:inline;">
@@ -138,7 +145,17 @@ def index():
         edited_text = request.form.get('edited_text', '').strip()
         text = request.form.get('text', '').strip()
         debug_audio = request.form.get('debug_audio', '').strip()
+        direct_tts = request.form.get('direct_tts', '').strip()
         sent = False
+        if direct_tts:
+            if input_queue is not None:
+                input_queue.put(("direct_tts", direct_tts))
+                # ログに記録（任意）
+                command_log.append("[直接発声] " + direct_tts)
+                if len(command_log) > 20:
+                    command_log = command_log[-20:]
+                sent = True
+            return redirect(url_for('index'))
         if debug_audio:
             # デバッグ用音声入力はtemp_asr_textsに履歴として保存
             temp_asr_texts.append(debug_audio)

@@ -110,6 +110,10 @@ def main():
         if user_text.strip() == "退出":
             print("[システム] 退出指示を受信したため、スクリプトを終了します。")
             os._exit(0)
+        if src == "direct_tts":
+            print(f"[直接発声] {user_text}")
+            t.speak(user_text)
+            continue
         if src == "text":
             print(f"[テキスト指示] {user_text}")
         else:
