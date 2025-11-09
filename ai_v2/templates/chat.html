@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>ささら進行アシスタント WebUI</title>
+    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+    <style>
+        body { font-family: sans-serif; background: #f7f7fa; margin: 0; }
+        #chat-container { max-width: 600px; margin: 40px auto; background: #fff; border-radius: 8px; box-shadow: 0 2px 8px #ccc; padding: 24px; }
+        #messages { height: 320px; overflow-y: auto; border: 1px solid #ddd; border-radius: 4px; padding: 12px; background: #fafaff; margin-bottom: 16px; }
+        .msg-user { color: #333; margin: 8px 0; }
+        .msg-bot { color: #1a73e8; margin: 8px 0; }
+        #input-area { display: flex; gap: 8px; }
+        #user-input, #direct-tts-input { flex: 1; padding: 8px; border-radius: 4px; border: 1px solid #bbb; }
+        #send-btn, #direct-tts-btn, #tts-toggle-btn { padding: 8px 16px; border: none; border-radius: 4px; background: #1a73e8; color: #fff; cursor: pointer; }
+        #send-btn:disabled, #direct-tts-btn:disabled { background: #aaa; }
+        #direct-tts-input { margin-top: 8px; }
+        #status { margin: 8px 0 0 0; font-size: 0.95em; color: #666; }
+    </style>
+</head>
+<body>
+<div id="chat-container">
+    <h2>ささら進行アシスタント</h2>
+    <div id="messages"></div>
+    <div id="input-area">
+        <input id="user-input" type="text" placeholder="メッセージを入力...">
+        <button id="send-btn">送信</button>
+        <button id="tts-toggle-btn">発声ON</button>
+    </div>
+    <textarea id="direct-tts-input" rows="2" placeholder="直接発声するテキスト（LLMを介さずTTSのみ）"></textarea>
+    <button id="direct-tts-btn">直接発声</button>
+    <div id="status"></div>
+</div>
+<script>
+    const socket = io();
+    const messages = document.getElementById('messages');
+    const userInput = document.getElementById('user-input');
+    const sendBtn = document.getElementById('send-btn');
+    const ttsToggleBtn = document.getElementById('tts-toggle-btn');
+    const directTtsInput = document.getElementById('direct-tts-input');
+    const directTtsBtn = document.getElementById('direct-tts-btn');
+    const status = document.getElementById('status');
+    let ttsEnabled = true;
+
+    function appendMessage(text, isBot) {
+        const div = document.createElement('div');
+        div.className = isBot ? 'msg-bot' : 'msg-user';
+        div.textContent = (isBot ? 'ささら: ' : 'あなた: ') + text;
+        messages.appendChild(div);
+        messages.scrollTop = messages.scrollHeight;
+    }
+
+    sendBtn.onclick = function() {
+        const msg = userInput.value.trim();
+        if (!msg) return;
+        appendMessage(msg, false);
+        socket.emit('user_message', { message: msg, direct_tts: false });
+        userInput.value = '';
+    };
+
+    directTtsBtn.onclick = function() {
+        const msg = directTtsInput.value.trim();
+        if (!msg) return;
+        appendMessage(msg, false);
+        socket.emit('user_message', { message: msg, direct_tts: true });
+        directTtsInput.value = '';
+    };
+
+    ttsToggleBtn.onclick = function() {
+        ttsEnabled = !ttsEnabled;
+        ttsToggleBtn.textContent = ttsEnabled ? '発声ON' : '発声OFF';
+        socket.emit('toggle_tts', { enabled: ttsEnabled });
+        status.textContent = ttsEnabled ? '発声は有効です。' : '発声は無効です。';
+    };
+
+    socket.on('bot_message', function(data) {
+        appendMessage(data.message, true);
+    });
+    socket.on('tts_status', function(data) {
+        ttsEnabled = data.enabled;
+        ttsToggleBtn.textContent = ttsEnabled ? '発声ON' : '発声OFF';
+        status.textContent = ttsEnabled ? '発声は有効です。' : '発声は無効です。';
+    });
+</script>
+</body>
+</html>
