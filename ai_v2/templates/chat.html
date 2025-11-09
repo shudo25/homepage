@@ -30,9 +30,32 @@
     <textarea id="direct-tts-input" rows="2" placeholder="直接発声するテキスト（LLMを介さずTTSのみ）"></textarea>
     <button id="direct-tts-btn">直接発声</button>
     <div id="status"></div>
+    <div style="margin-top:12px; display:flex; gap:8px;">
+        <button id="save-context-btn">文脈保存</button>
+        <button id="shutdown-btn" style="background:#e53935;">終了</button>
+    </div>
 </div>
 <script>
     const socket = io();
+        
+        const saveContextBtn = document.getElementById('save-context-btn');
+        const shutdownBtn = document.getElementById('shutdown-btn');
+        saveContextBtn.onclick = function() {
+            socket.emit('save_context');
+        };
+        shutdownBtn.onclick = function() {
+            if (confirm('本当に終了しますか？')) {
+                socket.emit('shutdown_server');
+            }
+        };
+
+        socket.on('context_saved', function(data) {
+            status.textContent = '文脈を保存しました。';
+        });
+        socket.on('server_shutdown', function(data) {
+            status.textContent = 'サーバを終了しました。ウィンドウを閉じてください。';
+        });
+
     const messages = document.getElementById('messages');
     const userInput = document.getElementById('user-input');
     const sendBtn = document.getElementById('send-btn');

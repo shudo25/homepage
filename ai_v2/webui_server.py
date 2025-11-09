@@ -7,6 +7,19 @@ app = Flask(__name__)
 socketio = SocketIO(app, cors_allowed_origins="*")
 
 assistant = Assistant()
+assistant.load_context()
+import os
+@socketio.on('save_context')
+def handle_save_context():
+    assistant.save_context()
+    emit('context_saved', {'status': 'ok'})
+
+@socketio.on('shutdown_server')
+def handle_shutdown_server():
+    assistant.save_context()
+    emit('server_shutdown', {'status': 'ok'})
+    # Flask-SocketIOのstopはイベントループによって異なるため、os._exitで強制終了
+    os._exit(0)
 
 tts_enabled = True  # 発声ON/OFFの状態
 
@@ -43,4 +56,7 @@ def handle_toggle_tts(data):
     emit('tts_status', {'enabled': tts_enabled}, broadcast=True)
 
 if __name__ == '__main__':
-    socketio.run(app, host='0.0.0.0', port=5000, debug=True)
+    try:
+        socketio.run(app, host='0.0.0.0', port=5000, debug=True)
+    finally:
+        assistant.save_context()
