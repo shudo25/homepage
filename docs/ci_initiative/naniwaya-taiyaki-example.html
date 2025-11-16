@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>AIに「たい焼きの上手な買い方」を聞いてみた</title>
+  <style>
+    body { font-family: sans-serif; background: #f7f7fa; margin: 0; padding: 2em; }
+    .container { max-width: 800px; margin: auto; background: #fff; border-radius: 8px; box-shadow: 0 2px 8px #ccc; padding: 2em; }
+    h1 { color: #1a73e8; }
+    pre, code { background: #f0f0f0; padding: 0.5em; border-radius: 4px; white-space: pre-wrap; word-break: break-all; overflow-x: auto; font-size: 16px; }
+    .section { margin-bottom: 2em; }
+    .explanation { background: #e3f2fd; padding: 1em; border-radius: 6px; margin-bottom: 2em; }
+    .markdown-body { background: #f0f0f0; border-radius: 4px; padding: 1em; }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body>
+  <div class="container">
+    <h1>AIに「たい焼きの上手な買い方」を聞いてみた</h1>
+    <div class="explanation">
+      <b>経緯：</b><br>
+      今回は、AI の活用が１つのテーマなので、麻布十番という土地柄を踏まえて試してみました。
+      <br>
+    </div>
+    <div class="section">
+      <h2>実際の相談例（プロンプト）</h2>
+      <pre>
+麻布十番では「浪花家総本店」が「たい焼き」の元祖として有名らしいです。
+今度、その近くで、高校の同期会を開くので、
+家族への手土産として「たい焼き」を買おうと思っていますが、
+さすが有名店なので、結構、待ち行列になるらしいです。
+上手な買い方が分かればいいのですが。</pre>
+      <span style="font-size:0.95em;color:#555;">※「プロンプト」とは、AIに投げかける質問や指示文のことを指します。普段の会話のように自然な日本語で入力できます。</span><br>
+    </div>
+    <div class="explanation">
+      <b>使い方のポイント：</b>
+      <ul>
+        <li>知りたいこと・困っていることを自然な日本語でそのまま入力してOK</li>
+        <li>Copilotは要点を整理して分かりやすくまとめてくれる</li>
+        <li>プロンプトとAIの出力をセットで記録しておくと、後から再利用や共有がしやすい</li>
+      </ul>
+    </div>
+    <div class="section">
+      <h2>Copilot（AI）の応答例（微修正後）</h2>
+      <div id="ai-output" class="markdown-body"></div>
+      <span style="font-size:0.95em;color:#555;">※ 表示形式などは後で（AI に依頼して）調整しています。また、価格情報については、最初は180円でしたが、別途ウェブ検索すると200円という情報や、他にも人づてに230円という情報もあり、情報の鮮度については注意が必要です。</span>
+    </div>
+    <div class="section">
+      <h2>まとめ</h2>
+      <ul>
+        <li>AIに「具体的な状況＋知りたいこと」を投げるだけで、実用的なアドバイスや要点が得られる</li>
+        <li>Copilotの出力をそのまま記録・共有することで、他の人にも役立つ情報になる</li>
+        <li>プロンプトと出力例をセットで残すことで、AI活用のノウハウが蓄積できる</li>
+      </ul>
+    </div>
+  </div>
+  <script>
+    // CopilotのMarkdown応答（実際の内容をそのまま・可読性重視で改行）
+    const aiMarkdown = `
+  # 🐟 浪花家総本店のたい焼き購入ガイド
+
+  麻布十番にある「浪花家総本店」は、たい焼き発祥の老舗として知られ、東京三大たい焼きの一つにも数えられる名店です。手土産として購入する際のポイントを以下にまとめました。
+
+  ## 📍 店舗情報
+  - 店名：浪花家総本店（なにわや そうほんてん）
+  - 場所：東京都港区麻布十番
+  - 電話番号：03-3583-4975
+  🕰 混雑状況とおすすめの訪問時間
+  - 平日午後（14時〜17時）：比較的空いていて、並ばずに購入できる可能性あり
+  - 土日・祝日：開店直後から混雑。1時間以上待つことも
+  - 冬季やイベント時期：特に混雑しやすいため、事前予約が安心
+  - 賢い購入方法：☎電話予約がおすすめ！
+  - 電話予約が可能：受け取り希望日時と個数を伝えると、指定時間に受け取り可能
+  - 店頭予約も可：混雑時は店頭で予約し、指定時間に再訪するスタイル
+
+  ## 📞 予約電話の例
+  「たい焼きを○個、○月○日○時に受け取りたいのですが、予約できますか？」
+
+
+  ## 🎁 手土産に最適な箱詰め
+  - 価格：1匹200円（税込）　-- 情報が古い場合あり、要確認
+  - 箱詰め：6個・10個・20個入りの箱があり、贈答用にも最適
+  - 日持ち：当日中がベスト。冷凍保存も可能で、再加熱で美味しさ復活
+  🍵 イートインも楽しめる
+  - 2階に「ナニワヤ・カフェ」があり、たい焼きや甘味をその場で楽しめます
+  `;
+    document.getElementById('ai-output').innerHTML = marked.parse(aiMarkdown);
+  </script>
+</body>
+</html>
