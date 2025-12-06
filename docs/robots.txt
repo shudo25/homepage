@@ -2,7 +2,7 @@ User-agent: *
 Allow: /
 
 # Sitemap
-Sitemap: https://freesemt.github.io/shudo25/sitemap.xml
+Sitemap: https://shudo25.github.io/homepage/sitemap.xml
 
 # クローリング不要なディレクトリ
 Disallow: /common/
