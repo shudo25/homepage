@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://freesemt.github.io/shudo25/sitemap.xml
+
+# クローリング不要なディレクトリ
+Disallow: /common/
+Disallow: /*.js$
+Disallow: /*.css$
