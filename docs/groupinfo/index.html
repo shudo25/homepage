@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>同期生専用ページ - 修道25回</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 0;
+      padding: 20px;
+    }
+    .login-container {
+      background: white;
+      padding: 40px;
+      border-radius: 10px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+      max-width: 400px;
+      width: 100%;
+    }
+    h1 {
+      color: #2c5aa0;
+      text-align: center;
+      margin-bottom: 10px;
+      font-size: 24px;
+    }
+    .subtitle {
+      text-align: center;
+      color: #666;
+      margin-bottom: 30px;
+      font-size: 14px;
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      margin-bottom: 8px;
+      color: #333;
+      font-weight: 500;
+    }
+    input[type="password"] {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #ddd;
+      border-radius: 5px;
+      font-size: 16px;
+      box-sizing: border-box;
+      transition: border-color 0.3s;
+    }
+    input[type="password"]:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    button:hover {
+      transform: translateY(-2px);
+    }
+    button:active {
+      transform: translateY(0);
+    }
+    .error {
+      color: #dc143c;
+      text-align: center;
+      margin-top: 15px;
+      font-size: 14px;
+      display: none;
+    }
+    .info {
+      background: #f0f8ff;
+      padding: 15px;
+      border-radius: 5px;
+      margin-top: 20px;
+      font-size: 13px;
+      color: #555;
+      line-height: 1.6;
+    }
+    .back-link {
+      text-align: center;
+      margin-top: 20px;
+    }
+    .back-link a {
+      color: #667eea;
+      text-decoration: none;
+      font-size: 14px;
+    }
+    .back-link a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <h1>🔒 同期生専用ページ</h1>
+    <div class="subtitle">修道25回生の皆さんへ</div>
+    
+    <form id="loginForm" onsubmit="return checkPassword(event)">
+      <div class="form-group">
+        <label for="password">パスワードを入力してください</label>
+        <input type="password" id="password" name="password" required autofocus>
+      </div>
+      <button type="submit">ログイン</button>
+    </form>
+    
+    <div class="error" id="errorMsg">パスワードが正しくありません</div>
+    
+    <div class="info">
+      このページには同期生の名簿や写真が含まれています。<br>
+      パスワードは運営委員会からの案内メールをご確認ください。
+    </div>
+    
+    <div class="back-link">
+      <a href="../index.html">← トップページに戻る</a>
+    </div>
+  </div>
+
+  <script>
+    // パスワードのSHA-256ハッシュ値（ohtoshi2026）
+    const correctPasswordHash = '31c81558fa4fcb0124d980945389f7ead512b1a54a3ca60475334142568c2a39';
+    
+    async function hashPassword(password) {
+      const encoder = new TextEncoder();
+      const data = encoder.encode(password);
+      const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+      const hashArray = Array.from(new Uint8Array(hashBuffer));
+      const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+      return hashHex;
+    }
+    
+    async function checkPassword(event) {
+      event.preventDefault();
+      const password = document.getElementById('password').value;
+      
+      // パスワードをハッシュ化して検証
+      const hashedPassword = await hashPassword(password);
+      
+      if (hashedPassword === correctPasswordHash) {
+        // セッションストレージにパスワードを保存（復号化に使用）
+        sessionStorage.setItem('groupinfo_auth', 'authenticated');
+        sessionStorage.setItem('groupinfo_key', password);
+        window.location.href = 'content.html';
+        return false;
+      }
+      
+      // エラー表示
+      document.getElementById('errorMsg').style.display = 'block';
+      document.getElementById('password').value = '';
+      document.getElementById('password').focus();
+      
+      // 3秒後にエラーメッセージを消す
+      setTimeout(() => {
+        document.getElementById('errorMsg').style.display = 'none';
+      }, 3000);
+      
+      return false;
+    }
+    
+    // ページロード時に既に認証済みかチェック
+    window.addEventListener('DOMContentLoaded', () => {
+      if (sessionStorage.getItem('groupinfo_auth') === 'authenticated') {
+        window.location.href = 'content.html';
+      }
+    });
+  </script>
+</body>
+</html>

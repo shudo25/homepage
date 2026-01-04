@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>同期生情報 - 修道25回</title>
+  <link rel="stylesheet" href="../common/responsive.css">
+  <style>
+    body {
+      background-color: #fafafa;
+      padding: 20px;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      background: white;
+      padding: 40px;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    h1 {
+      color: #2c5aa0;
+      border-bottom: 3px solid #4169e1;
+      padding-bottom: 15px;
+      margin-bottom: 30px;
+    }
+    .section {
+      background-color: #f9f9f9;
+      padding: 25px;
+      margin: 20px 0;
+      border-radius: 8px;
+      border-left: 5px solid #4169e1;
+    }
+    .section h2 {
+      color: #2c5aa0;
+      margin-top: 0;
+      margin-bottom: 15px;
+      font-size: 22px;
+    }
+    .section p {
+      color: #555;
+      line-height: 1.8;
+      margin-bottom: 15px;
+    }
+    .download-btn {
+      display: inline-block;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 12px 30px;
+      text-decoration: none;
+      border-radius: 5px;
+      font-weight: 600;
+      transition: transform 0.2s;
+      margin-right: 10px;
+      margin-bottom: 10px;
+    }
+    .download-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+    }
+    .view-btn {
+      display: inline-block;
+      background: white;
+      color: #667eea;
+      padding: 12px 30px;
+      text-decoration: none;
+      border-radius: 5px;
+      border: 2px solid #667eea;
+      font-weight: 600;
+      transition: all 0.2s;
+      margin-right: 10px;
+      margin-bottom: 10px;
+    }
+    .view-btn:hover {
+      background: #667eea;
+      color: white;
+    }
+    .notice {
+      background: #fff3cd;
+      border: 1px solid #ffc107;
+      padding: 15px;
+      border-radius: 5px;
+      margin: 20px 0;
+      color: #856404;
+    }
+    .notice strong {
+      display: block;
+      margin-bottom: 8px;
+    }
+    .logout-btn {
+      float: right;
+      background: #dc143c;
+      color: white;
+      padding: 8px 20px;
+      text-decoration: none;
+      border-radius: 5px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+    }
+    .logout-btn:hover {
+      background: #b00020;
+    }
+    .back-link {
+      margin-top: 30px;
+      text-align: center;
+    }
+    .back-link a {
+      color: #667eea;
+      text-decoration: none;
+    }
+    .back-link a:hover {
+      text-decoration: underline;
+    }
+    .coming-soon {
+      color: #999;
+      font-style: italic;
+    }
+    .photo-card {
+      background: white;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      transition: transform 0.2s;
+      cursor: pointer;
+    }
+    .photo-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+    }
+    .photo-card img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+    .photo-card .photo-info {
+      padding: 10px;
+      text-align: center;
+      color: #555;
+      font-size: 14px;
+    }
+    .loading-spinner {
+      text-align: center;
+      padding: 30px;
+      color: #999;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <button class="logout-btn" onclick="logout()">ログアウト</button>
+    <h1>📚 同期生情報</h1>
+    
+    <div class="notice">
+      <strong>⚠️ 個人情報の取り扱いについて</strong>
+      このページの情報は同期生専用です。第三者への共有や転載はご遠慮ください。
+    </div>
+    
+    <div class="section">
+      <h2>📋 名簿</h2>
+      <p>
+        修道25回生の最新名簿です。連絡先や住所などの情報が含まれています。<br>
+        情報に変更がある場合は、運営委員会までご連絡ください。
+      </p>
+      <div id="memberList">
+        <button class="view-btn" onclick="viewPDF('meibo')">📄 ブラウザで閲覧</button>
+        <a href="#" class="download-btn" onclick="downloadPDF('meibo'); return false;">⬇️ ダウンロード</a>
+      </div>
+    </div>
+    
+    <div class="section">
+      <h2>📷 写真集</h2>
+      <p>
+        同期会やイベントでの写真をまとめています。<br>
+        思い出の一枚を探してみてください。<br>
+        <small style="color: #999;">※ サムネイルをクリックすると拡大表示されます</small>
+      </p>
+      <div id="photoGallery" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; margin-top: 20px;">
+        <!-- 写真がここに表示されます -->
+      </div>
+    </div>
+    
+    <!-- 画像拡大表示用モーダル -->
+    <div id="imageModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 1000; cursor: pointer;" onclick="closeModal()">
+      <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); max-width: 90%; max-height: 90%;">
+        <img id="modalImage" style="max-width: 100%; max-height: 90vh; display: block;">
+        <p id="modalTitle" style="color: white; text-align: center; margin-top: 15px; font-size: 18px;"></p>
+      </div>
+      <button onclick="closeModal(); event.stopPropagation();" style="position: absolute; top: 20px; right: 30px; background: white; border: none; border-radius: 50%; width: 40px; height: 40px; font-size: 24px; cursor: pointer; box-shadow: 0 2px 10px rgba(0,0,0,0.3);">×</button>
+    </div>
+    
+    <div class="back-link">
+      <a href="../index.html">← トップページに戻る</a>
+    </div>
+  </div>
+
+  <script>
+    // 認証チェック
+    window.addEventListener('DOMContentLoaded', () => {
+      if (sessionStorage.getItem('groupinfo_auth') !== 'authenticated') {
+        window.location.href = 'index.html';
+      }
+    });
+    
+    function logout() {
+      sessionStorage.removeItem('groupinfo_auth');
+      sessionStorage.removeItem('groupinfo_key');
+      window.location.href = 'index.html';
+    }
+    
+    // 暗号化されたファイルのマッピング
+    const fileMapping = {
+      'meibo': {
+        encrypted: 'd8f3a7c9b5e2f1a4d6c8b9e7f3a5c2d1.enc',
+        filename: '関東修道２５回名簿.pdf'
+      }
+    };
+    
+    // 写真のマッピング（デモ用：同じ写真を複数表示）
+    const photoMapping = [
+      { id: 1, encrypted: 'photos/p001.enc', title: '2025年11月 同期会', description: '麻布十番での集まり' },
+      { id: 2, encrypted: 'photos/p001.enc', title: '2025年10月 競馬を楽しむ会', description: '秋の競馬場にて' },
+      { id: 3, encrypted: 'photos/p001.enc', title: '2024年 新年会', description: '新年の集い' },
+      { id: 4, encrypted: 'photos/p001.enc', title: '2024年 秋の同期会', description: '懐かしい顔ぶれ' },
+      { id: 5, encrypted: 'photos/p001.enc', title: '2023年 忘年会', description: '年末の集まり' },
+      { id: 6, encrypted: 'photos/p001.enc', title: '2023年 夏の会', description: 'ビアガーデンにて' },
+      { id: 7, encrypted: 'photos/p001.enc', title: '2022年 新春の会', description: '新年の抱負を語り合う' },
+      { id: 8, encrypted: 'photos/p001.enc', title: '2022年 秋の旅行', description: '温泉旅行の思い出' }
+      // 実際の写真が増えたら、encrypted のパスを実際のファイルに変更
+    ];
+    
+    // XOR復号化関数
+    function xorDecrypt(encryptedData, key) {
+      const keyBytes = new TextEncoder().encode(key);
+      const keyLen = keyBytes.length;
+      const decrypted = new Uint8Array(encryptedData.length);
+      
+      for (let i = 0; i < encryptedData.length; i++) {
+        decrypted[i] = encryptedData[i] ^ keyBytes[i % keyLen];
+      }
+      
+      return decrypted;
+    }
+    
+    // Base64デコード
+    function base64ToArrayBuffer(base64) {
+      const binaryString = atob(base64);
+      const bytes = new Uint8Array(binaryString.length);
+      for (let i = 0; i < binaryString.length; i++) {
+        bytes[i] = binaryString.charCodeAt(i);
+      }
+      return bytes;
+    }
+    
+    // PDFを復号化して表示
+    async function viewPDF(type) {
+      const fileInfo = fileMapping[type];
+      if (!fileInfo) return;
+      
+      const password = sessionStorage.getItem('groupinfo_key');
+      if (!password) {
+        alert('認証情報が見つかりません。再度ログインしてください。');
+        logout();
+        return;
+      }
+      
+      try {
+        // 暗号化されたファイルを読み込む
+        const response = await fetch(fileInfo.encrypted);
+        const base64Data = await response.text();
+        
+        // Base64デコード
+        const encryptedData = base64ToArrayBuffer(base64Data);
+        
+        // XOR復号化
+        const decryptedData = xorDecrypt(encryptedData, password);
+        
+        // Blobを作成
+        const blob = new Blob([decryptedData], { type: 'application/pdf' });
+        const url = URL.createObjectURL(blob);
+        
+        // 新しいタブで開く
+        window.open(url, '_blank');
+        
+        // メモリ解放（5秒後）
+        setTimeout(() => URL.revokeObjectURL(url), 5000);
+      } catch (error) {
+        console.error('PDFの復号化に失敗しました:', error);
+        alert('PDFの読み込みに失敗しました。');
+      }
+    }
+    
+    // PDFをダウンロード
+    async function downloadPDF(type) {
+      const fileInfo = fileMapping[type];
+      if (!fileInfo) return;
+      
+      const password = sessionStorage.getItem('groupinfo_key');
+      if (!password) {
+        alert('認証情報が見つかりません。再度ログインしてください。');
+        logout();
+        return;
+      }
+      
+      try {
+        // 暗号化されたファイルを読み込む
+        const response = await fetch(fileInfo.encrypted);
+        const base64Data = await response.text();
+        
+        // Base64デコード
+        const encryptedData = base64ToArrayBuffer(base64Data);
+        
+        // XOR復号化
+        const decryptedData = xorDecrypt(encryptedData, password);
+        
+        // Blobを作成
+        const blob = new Blob([decryptedData], { type: 'application/pdf' });
+        const url = URL.createObjectURL(blob);
+        
+        // ダウンロード
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = fileInfo.filename;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        
+        // メモリ解放
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+      } catch (error) {
+        console.error('PDFのダウンロードに失敗しました:', error);
+        alert('PDFのダウンロードに失敗しました。');
+      }
+    }
+    
+    // 写真ギャラリーの初期化
+    async function initPhotoGallery() {
+      const gallery = document.getElementById('photoGallery');
+      gallery.innerHTML = '<div class="loading-spinner">📷 写真を読み込み中...</div>';
+      
+      const password = sessionStorage.getItem('groupinfo_key');
+      if (!password) {
+        gallery.innerHTML = '<p class="coming-soon">認証情報が見つかりません。</p>';
+        return;
+      }
+      
+      gallery.innerHTML = '';
+      
+      for (const photo of photoMapping) {
+        try {
+          // 暗号化された画像を読み込んで復号化
+          const response = await fetch(photo.encrypted);
+          if (!response.ok) {
+            // ファイルが存在しない場合はスキップ（デモ用）
+            continue;
+          }
+          
+          const base64Data = await response.text();
+          const encryptedData = base64ToArrayBuffer(base64Data);
+          const decryptedData = xorDecrypt(encryptedData, password);
+          
+          // Blobを作成してサムネイル表示
+          const blob = new Blob([decryptedData], { type: 'image/jpeg' });
+          const url = URL.createObjectURL(blob);
+          
+          // カードを作成
+          const card = document.createElement('div');
+          card.className = 'photo-card';
+          card.innerHTML = `
+            <img src="${url}" alt="${photo.title}">
+            <div class="photo-info">
+              <strong>${photo.title}</strong><br>
+              <small>${photo.description || ''}</small>
+            </div>
+          `;
+          
+          // クリックで拡大表示
+          card.onclick = () => showModal(url, photo.title);
+          
+          gallery.appendChild(card);
+        } catch (error) {
+          console.log(`写真 ${photo.id} の読み込みをスキップ:`, error);
+        }
+      }
+      
+      if (gallery.children.length === 0) {
+        gallery.innerHTML = '<p class="coming-soon">写真はまだアップロードされていません。</p>';
+      }
+    }
+    
+    // モーダルで画像を拡大表示
+    function showModal(imageUrl, title) {
+      const modal = document.getElementById('imageModal');
+      const modalImage = document.getElementById('modalImage');
+      const modalTitle = document.getElementById('modalTitle');
+      
+      modalImage.src = imageUrl;
+      modalTitle.textContent = title;
+      modal.style.display = 'block';
+      document.body.style.overflow = 'hidden';
+    }
+    
+    // モーダルを閉じる
+    function closeModal() {
+      const modal = document.getElementById('imageModal');
+      modal.style.display = 'none';
+      document.body.style.overflow = 'auto';
+    }
+    
+    // ページ読み込み時に写真ギャラリーを初期化
+    window.addEventListener('DOMContentLoaded', () => {
+      initPhotoGallery();
+    });
+  </script>
+</body>
+</html>

@@ -8,3 +8,4 @@ Sitemap: https://shudo25.github.io/homepage/sitemap.xml
 Disallow: /common/
 Disallow: /*.js$
 Disallow: /*.css$
+Disallow: /groupinfo/
