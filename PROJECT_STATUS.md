@@ -1,13 +1,13 @@
 # Project Status
 
-**Last Updated**: 2026-02-11 (v0.4 update)
+**Last Updated**: 2026-03-23
 
 ---
 
 ## 🎯 Current Task
 
-Working on: AI Context Standard v0.4 への更新完了
-Next: 新しいセッションでの初期化テスト、他のレポジトリへの展開の検討
+Working on: 同期会（首都圏メンバー）向けレストラン情報調査
+Next: 次の同期会イベント企画への対応
 See: [COPILOT-INIT.md](COPILOT-INIT.md), [PROJECT_STATUS.md](PROJECT_STATUS.md), [AI_CONTEXT_STANDARD.md](AI_CONTEXT_STANDARD.md)
 
 ---
@@ -35,6 +35,15 @@ See: [COPILOT-INIT.md](COPILOT-INIT.md), [PROJECT_STATUS.md](PROJECT_STATUS.md),
 ---
 
 ## 🎯 Recent Work
+
+### 2026-03-23: 同期会向けレストラン情報調査
+- 大利君の要望：お好み焼き会の会場拡大（ソニア新橋5丁目が8名ギリギリのため）
+- 条件：広島風お好み焼き、大人数対応（10名以上）
+- 調査結果（2候補）：
+  - **花子 飯田橋店**（九段下駅5分）: 広島風専門、貸切20〜50名可、食べログ百名店選出
+    https://tabelog.com/tokyo/A1309/A130906/13267964/
+  - **うさぎ**（原宿駅3分）: 広島風専門、コース最大18名、貸切20〜50名可
+    https://tabelog.com/tokyo/A1306/A130601/13129954/
 
 ### 2026-02-11: AI Context Standard v0.4 Update
 - Enhanced AI_CONTEXT_STANDARD.md with "How to Use This Standard" section
