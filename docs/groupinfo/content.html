@@ -174,6 +174,34 @@
       font-weight: 600;
       font-size: 13px;
     }
+    .email-row {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 6px;
+    }
+    .email-addr {
+      color: #667eea;
+      font-size: 14px;
+    }
+    .copy-btn {
+      padding: 3px 10px;
+      font-size: 12px;
+      background: #f0f0f0;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      cursor: pointer;
+      color: #444;
+      transition: background 0.2s;
+    }
+    .copy-btn:hover {
+      background: #e0e0e0;
+    }
+    .copy-btn.copied {
+      background: #d4edda;
+      border-color: #b8dacc;
+      color: #2d6a4f;
+    }
   </style>
 </head>
 <body>
@@ -190,7 +218,11 @@
       <h2>📋 名簿</h2>
       <p>
         修道25回生の最新名簿です。連絡先や住所などの情報が含まれています。<br>
-        情報に変更がある場合は、運営委員会（<a href="mailto:shudo25support@googlegroups.com">shudo25support@googlegroups.com</a>）までご連絡ください。
+        情報に変更がある場合は、運営委員会までご連絡ください。<br>
+        <span class="email-row">
+          <a href="mailto:shudo25support@googlegroups.com" class="email-addr">shudo25support@googlegroups.com</a>
+          <button class="copy-btn" onclick="copyEmail(this)" data-email="shudo25support@googlegroups.com">コピー</button>
+        </span>
       </p>
       <a href="#TODO_MEIBO" class="gdrive-btn pending" id="meiboLink" target="_blank" rel="noopener">📄 名簿を開く（Googleドライブ）</a>
     </div>
@@ -331,6 +363,18 @@
         '2012-06-16': 'https://drive.google.com/drive/folders/1pUtGDUG5LsuoVsbkOxtbBeZFsqc27c_N?usp=sharing',
       }
     };
+
+    function copyEmail(btn) {
+      const email = btn.dataset.email;
+      navigator.clipboard.writeText(email).then(() => {
+        btn.textContent = 'コピー済み';
+        btn.classList.add('copied');
+        setTimeout(() => {
+          btn.textContent = 'コピー';
+          btn.classList.remove('copied');
+        }, 2000);
+      });
+    }
 
     function setDriveLinks() {
       // 名簿リンク
