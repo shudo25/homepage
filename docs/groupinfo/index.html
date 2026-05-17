@@ -152,9 +152,7 @@
       const hashedPassword = await hashPassword(password);
       
       if (hashedPassword === correctPasswordHash) {
-        // セッションストレージにパスワードを保存（復号化に使用）
         sessionStorage.setItem('groupinfo_auth', 'authenticated');
-        sessionStorage.setItem('groupinfo_key', password);
         window.location.href = 'content.html';
         return false;
       }
