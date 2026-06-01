@@ -100,9 +100,9 @@
   (2) 企画者が企画を実行する。
   (3) 企画者が企画の実行結果（継続性、人数）を運営MLへ報告する。
   (4) 報告を受けて、企画者に規定の支援金が支払われる。
-
-<big>申請メールの例</big>
-    主旨に沿うものであれば、形式は問いませんが、
+</pre>
+<p><a id="application-email"></a><big>申請メールの例</big></p>
+<pre>    主旨に沿うものであれば、形式は問いませんが、
     例えば、次のように申請してください。
 </pre>
 
@@ -129,11 +129,91 @@
 
 <script src="../../common/copy-button.js"></script>
 <script>
+function createCopyLinkButton(anchorId) {
+    const anchor = document.getElementById(anchorId);
+    if (!anchor) return;
+    const button = document.createElement('button');
+    button.textContent = '🔗 URLをコピー';
+    button.style.cssText = 'position:static;display:inline-block;margin-left:8px;font-size:0.85em;background-color:#4CAF50;color:white;border:none;padding:4px 8px;border-radius:4px;cursor:pointer;';
+    button.onclick = function() {
+        const url = location.origin + location.pathname + '#' + anchorId;
+        if (navigator.clipboard && window.isSecureContext) {
+            navigator.clipboard.writeText(url).then(() => {
+                button.textContent = '✓ コピー完了!';
+                setTimeout(() => { button.textContent = '🔗 URLをコピー'; }, 2000);
+            });
+        } else {
+            const ta = document.createElement('textarea');
+            ta.value = url;
+            document.body.appendChild(ta);
+            ta.select();
+            document.execCommand('copy');
+            document.body.removeChild(ta);
+            button.textContent = '✓ コピー完了!';
+            setTimeout(() => { button.textContent = '🔗 URLをコピー'; }, 2000);
+        }
+    };
+    const titleElem = anchor.nextSibling; // <big> element
+    if (titleElem && titleElem.nextSibling) {
+        anchor.parentNode.insertBefore(button, titleElem.nextSibling);
+    } else {
+        anchor.parentNode.appendChild(button);
+    }
+}
+
 // ページ読み込み後にコピーボタンを追加
 document.addEventListener('DOMContentLoaded', function() {
     createCopyButton('email-template');
+    createCopyButton('report-email-template');
+    createCopyLinkButton('application-email');
+    createCopyLinkButton('report-email');
 });
 </script>
+
+<p><a id="report-email"></a><big>報告メールの例</big></p>
+<pre>    企画実行後、次の内容を含む報告メールを送ってください。
+    ・ 振込先（振込金額：実参加同期生数×2,000円）
+    ・ 実際の参加人数
+    ・ 簡単な実行状況
+    ・ 証拠写真（添付）
+</pre>
+
+<table border="1" cellpadding="5" cellspacing="0" id="report-email-template" style="margin: 0;">
+<tr><td><pre>
+宛先アドレス： shudo25support@googlegroups.com
+件名： 支援金適用企画の実施報告
+
+運営委員各位
+
+　こんにちは！
+
+　下記の内容で企画を実施しましたので、ご報告します。
+
+　日時：１０月８日（水）１２：００～１４：３０
+
+　場所：吉池食堂（御徒町吉池ビル９階）
+　　　　電話０３-３８３６-０４４５
+
+　参加者：中村（哲）、佐々木（保）、松下、森（４名）
+
+　魚屋さんが運営する食堂で予約可能です。
+　予約時に展望席を希望すると景色もいいです。
+　上野の博物館、動物園など行く機会があればお勧めです。
+　料理がおいしく、お酒の種類も多いので、爺さん会、家族会など
+　小宴会にお勧めです。
+
+　支援金の振込先は、
+　　〇〇銀行〇〇支店　普通預金　〇〇〇〇〇〇〇
+　　〇〇　〇〇〇〇
+　でお願いします。
+　（振込金額：４名×2,000円＝8,000円）
+
+　写真を添付します。
+
+                  森　章次郎（企画代表者）
+</pre></td></tr>
+</table>
+
 </div>
 <div class="requirements">
 <h2>📋 要件やルールに関する補足</h2>
