@@ -53,8 +53,6 @@ present/                # Presentation generation tools
   └── *.txt                               # Script templates
 
 codes/                  # Utility scripts
-encrypt_pdf.py         # PDF encryption utility
-encrypt_photos.py      # Photo encryption utility
 ```
 
 ---
@@ -247,7 +245,7 @@ python present/create_ci_presentation_v3_final.py
 ### Sensitive Files
 
 - `.env` - Environment variables (Git-ignored)
-- `encrypt_pdf.py`, `encrypt_photos.py` - Handle carefully
+- 暗号化スクリプト（`encrypt_pdf.py`, `encrypt_photos.py`）は非公開リポジトリ `shudo25-private/homepage-tools/` に移動済み。パスワードは環境変数 `ENCRYPT_PASSWORD` で渡す
 
 ### External Dependencies
 
