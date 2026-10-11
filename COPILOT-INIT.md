@@ -83,13 +83,14 @@ codes/                  # Utility scripts
 
 - **Python version**: 3.11+ preferred
 - **Type hints**: Use where beneficial (not mandatory for scripts)
-- **Virtual environment**: `.venv/` (Git-ignored)
+- **Environment**: Use the globally installed Python environment by default; do not create or activate a venv unless project-specific dependencies, version conflicts, or reproducibility requirements make isolation necessary
 - **Dependencies**: Document in requirements.txt or inline comments
 - **Character encoding**: UTF-8 for all files
 
 ### 4. **AI Assistant Development Conventions**
 
 - **Current version**: ai_v2/ is active development
+- **Separate event projects**: Treat an assistant or tool for a particular year's event as a separate project. Start by eliciting its requirements and designing it from scratch; the existing `ai_v2/` assistant may be a reference, but do not assume its purpose, architecture, character, or implementation should carry over.
 - **Legacy code**: ai_codes/ maintained but not primary focus
 - **Character definition**: Sasara character in `characters/` modules
 - **Server architecture**: Separate TTS server and main server
@@ -220,9 +221,7 @@ When you fail the same operation 3+ times:
 ### AI Assistant Development
 
 ```bash
-# Activate virtual environment
-.venv\Scripts\activate  # Windows
-
+# Use globally installed Python by default
 # Run TTS server
 python ai_v2/tts_server.py
 
