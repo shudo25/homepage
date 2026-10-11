@@ -245,7 +245,7 @@ python present/create_ci_presentation_v3_final.py
 ### Sensitive Files
 
 - `.env` - Environment variables (Git-ignored)
-- 暗号化スクリプト（`encrypt_pdf.py`, `encrypt_photos.py`）は非公開リポジトリ `shudo25-private/homepage-tools/` に移動済み。パスワードは環境変数 `ENCRYPT_PASSWORD` で渡す
+- 暗号化スクリプト（`encrypt_pdf.py`, `encrypt_photos.py`）は非公開リポジトリ `shudo25-private/homepage-tools/` に移動済み。パスワードは環境変数 `SHUDO25_ENCRYPT_PASSWORD` で渡す
 
 ### External Dependencies
 
