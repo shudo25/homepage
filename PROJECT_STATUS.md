@@ -1,13 +1,14 @@
 # Project Status
 
-**Last Updated**: 2026-05-17
+**Last Updated**: 2026-10-17
 
 ---
 
 ## 🎯 Current Task
 
-Working on: 同期生専用ページ（groupinfo）の整備完了  
-Next: 本番ページで各リンクの動作確認、同期生への周知
+Working on: 同期生専用ページの情報構成とアクセス管理方針の検討
+
+Next: まず現行の利用しやすさを保ち、運営側で段階的に検討する
 
 ---
 
@@ -19,13 +20,12 @@ Next: 本番ページで各リンクの動作確認、同期生への周知
 
 ### 同期生専用ページ（docs/groupinfo/）
 
-- ✅ パスワード認証ページ（`index.html`）
-- ✅ 名簿：Google Drive リンク方式（パスワード保護済みPDF）
-- ✅ 写真集：イベント別 Google Drive フォルダリンク（14件）
-- ✅ メーリングリストアドレス表示＋コピーボタン
-
-**パスワード**: `ohtoshi2026`  
-**名簿PDF**: `H:\マイドライブ\Shudo\草野作業室\名簿　　草野\関東修道２５回（251122）_protected.pdf`（保護済み）
+- 現在の掲載対象：名簿、写真集、動画・議論の記録
+- 2026-10-19 準備幹事会ページに、同期生専用情報の掲載とアクセス管理方針を記録
+- セキュリティと利用しやすさのバランスを重視し、当面は認証方式を変更しない
+- 将来の選択肢として Google アカウント／Google Groups による限定共有を検討
+- Google Groups 共有では、メンバーがGoogleアカウントで認証する必要がある。Gmail以外のアドレスもGoogleアカウントに登録できるが、利用者への案内・導入負担を確認してから判断する
+- NHK動画は、共有フォルダの一覧をリンクから確認できることを確認済み。動画の掲載・共有方法は、アクセス制限と権利・利用条件を分けて検討する
 
 ---
 
@@ -33,6 +33,7 @@ Next: 本番ページで各リンクの動作確認、同期生への周知
 
 | 日付 | 内容 |
 |---|---|
+| 2026-10-17 | 同期生専用ページの今後の情報構成とアクセス管理方針を検討。認証方式は当面変更せず、段階的に進める方針を2026-10-19準備幹事会ページに記録 |
 | 2026-05-17 | 同期生専用ページ：Google Drive方式移行（名簿・写真集14件・コピーボタン追加） |
 | 2026-03-23 | 同期会向けレストラン情報調査（広島風お好み焼き・大人数対応） |
 
@@ -40,11 +41,10 @@ Next: 本番ページで各リンクの動作確認、同期生への周知
 
 ## ⏳ Next Steps
 
-### Immediate (This Session)
-1. ✅ Create COPILOT-INIT.md with static conventions
-2. ✅ Create PROJECT_STATUS.md with dynamic state
-3. ✅ Add initialization reference to README.md
-4. ⏳ Test initialization with Copilot ("Please read COPILOT-INIT.md to initialize")
+### Immediate
+- 2026-10-19 準備幹事会で、同期生専用情報の掲載方針とアクセス管理について意見を確認
+- 利用状況や同期生の負担を見ながら、認証方式の変更は急がず段階的に判断
+- 動画・議論の記録セクションは、掲載内容と共有方法を整理してから追加を検討
 
 ### Short-term (Next Few Sessions)
 - Review and refine INIT/STATUS content boundaries
