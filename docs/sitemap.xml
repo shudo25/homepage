@@ -3,12 +3,18 @@
   <!-- トップページ -->
   <url>
     <loc>https://shudo25.github.io/homepage/</loc>
-    <lastmod>2025-12-06</lastmod>
+    <lastmod>2026-10-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   
   <!-- イベント：定例同期会 -->
+  <url>
+    <loc>https://shudo25.github.io/homepage/events/20261128/ethics-and-ai.html</loc>
+    <lastmod>2026-10-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
   <url>
     <loc>https://shudo25.github.io/homepage/events/20251122/index.html</loc>
     <lastmod>2025-11-22</lastmod>
@@ -76,6 +82,18 @@
   </url>
   
   <!-- 運営ミーティング -->
+  <url>
+    <loc>https://shudo25.github.io/homepage/meetings/archive.html</loc>
+    <lastmod>2026-10-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://shudo25.github.io/homepage/meetings/20261019/index.html</loc>
+    <lastmod>2026-10-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+  </url>
   <url>
     <loc>https://shudo25.github.io/homepage/meetings/20251104/index.html</loc>
     <lastmod>2025-11-04</lastmod>

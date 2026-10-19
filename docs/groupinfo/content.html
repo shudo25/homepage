@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="robots" content="noindex, nofollow">
-  <title>同期生情報 - 修道25回</title>
+  <title>同期生のページ - 修道25回</title>
   <link rel="stylesheet" href="../common/responsive.css">
   <style>
     body {
@@ -202,20 +202,99 @@
       border-color: #b8dacc;
       color: #2d6a4f;
     }
+    .intro {
+      color: #444;
+      line-height: 1.9;
+    }
+    .page-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 24px 0;
+    }
+    .page-nav a {
+      padding: 10px 16px;
+      border: 1px solid #c5d0f0;
+      border-radius: 6px;
+      color: #2c5aa0;
+      text-decoration: none;
+      background: #f0f4ff;
+    }
+    .knowledge-section {
+      border-left-color: #31816b;
+      background: #f3faf7;
+    }
+    .section h3 {
+      color: #294c64;
+      margin-top: 24px;
+    }
+    .resource-card {
+      background: white;
+      border: 1px solid #d4e4dc;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 18px 0;
+    }
+    .resource-card h4 {
+      font-size: 18px;
+      margin: 0 0 12px;
+      color: #294c64;
+    }
+    .resource-card li {
+      margin: 8px 0;
+      line-height: 1.7;
+    }
+    .section details {
+      margin-top: 24px;
+      padding-top: 16px;
+      border-top: 1px solid #ddd;
+    }
+    .section summary {
+      cursor: pointer;
+      color: #2c5aa0;
+      line-height: 1.7;
+    }
+    a:focus-visible, button:focus-visible, summary:focus-visible {
+      outline: 3px solid #2c5aa0;
+      outline-offset: 3px;
+    }
+    @media (max-width: 600px) {
+      body { padding: 10px; }
+      .container { padding: 20px 16px; }
+      .section { padding: 18px 14px; }
+      h1 { font-size: 24px; clear: both; padding-top: 16px; }
+      .event-item { flex-wrap: wrap; gap: 10px; }
+      .event-name { margin: 0; }
+      .event-item .gdrive-btn { margin-left: auto; }
+      .email-row { flex-wrap: wrap; }
+      .email-addr { overflow-wrap: anywhere; }
+      .resource-card { padding: 16px; }
+      .resource-card .gdrive-btn { white-space: normal; line-height: 1.7; }
+      .gdrive-hint-text { flex: 1 1 100%; min-width: 0; }
+    }
   </style>
 </head>
 <body>
   <div class="container">
     <button class="logout-btn" onclick="logout()">ログアウト</button>
-    <h1>📚 同期生情報</h1>
+    <h1>📚 同期生のページ</h1>
+    <p class="intro">
+      仲間とのつながりを確かめ、集いを振り返り、暮らしに役立つ知恵を持ち寄る。<br>
+      名簿や写真に加えて、同期生どうしで情報や経験を共有する場所にしていきたいと思います。
+    </p>
+    <nav class="page-nav" aria-label="このページの内容">
+      <a href="#roster">名簿・連絡先</a>
+      <a href="#gatherings">集いの記録</a>
+      <a href="#videos">知恵と情報を持ち寄る</a>
+    </nav>
     
     <div class="notice">
       <strong>⚠️ 個人情報の取り扱いについて</strong>
       このページの情報は同期生専用です。第三者への共有や転載はご遠慮ください。
     </div>
     
-    <div class="section">
-      <h2>📋 名簿</h2>
+    <div class="section" id="roster">
+      <h2>📋 名簿・連絡先</h2>
       <p>
         修道25回生の最新名簿です。連絡先や住所などの情報が含まれています。<br>
         情報に変更がある場合は、運営委員会までご連絡ください。<br>
@@ -227,8 +306,20 @@
       <a href="#TODO_MEIBO" class="gdrive-btn pending" id="meiboLink" target="_blank" rel="noopener">📄 名簿を開く（Googleドライブ）</a>
     </div>
     
-    <div class="section">
-      <h2>📷 写真集</h2>
+    <div class="section" id="gatherings">
+      <h2>📷 集いの記録</h2>
+      <p>定例同期会や「気楽に集まる会」の報告・写真を、開催回ごとに振り返る入口です。</p>
+      <h3>気楽に集まる会</h3>
+      <div class="resource-card">
+        <h4>2025年10月8日　競馬を楽しむ会</h4>
+        <p>同期生が集まった懇親会の実施報告と写真です。</p>
+        <p><a href="../events/comfortable/20251008-keiba-report.html">報告と写真を見る（現在は公開ページ）</a></p>
+        <p>
+          詳しい報告や写真を同期生向けに共有する方針を検討しています。
+          現在の報告と写真は引き続き公開状態で、この入口への掲載によって非公開になるものではありません。
+        </p>
+      </div>
+      <h3>定例同期会などの写真集</h3>
       <p>
         同期会やイベントでの写真をGoogleドライブで公開しています。<br>
         各イベントのボタンをクリックするとGoogleドライブのフォルダが開きます。
@@ -324,17 +415,46 @@
       </ul>
     </div>
     
-    <section class="section" id="videos" aria-labelledby="videos-title">
-      <h2 id="videos-title">動画集</h2>
+    <section class="section knowledge-section" id="videos" aria-labelledby="videos-title">
+      <h2 id="videos-title">🌱 同期生の知恵と情報を持ち寄る</h2>
       <p>
-        Googleドライブの動画フォルダを開き、見たい動画を選んでください。<br>
-        動画をダブルクリック（スマートフォンではタップ）すると、プレビュー画面で再生できます。
-        再生できるかどうかは、Googleドライブの処理状況やお使いのブラウザーによって異なります。
+        <strong>暮らしの中の不安や疑問に、一人で向き合うのではなく。</strong><br>
+        知っておくと役立つ情報や、それぞれの経験を同期生どうしで持ち寄り、
+        考え、助け合うきっかけにしたいと思います。
+        動画に限らず、参考になる記事や経験談なども共有していく構想です。
       </p>
-      <a href="https://drive.google.com/drive/folders/1JrWef93qJBiT9-wYvBQGtUJL8CGZiHeT?usp=sharing" class="gdrive-btn" target="_blank" rel="noopener">動画を開く（Googleドライブ）</a>
-      <p><a href="#video-sharing-discussion">動画共有についての議論の記録</a></p>
+      <h3>最初のテーマ：ネットを安心して使うために</h3>
+      <p>
+        国原君からの「不正アクセスや個人情報の流出から、どう自分を守るか」という問題提起をきっかけに、
+        ネット銀行・ネット証券などを利用する際の安全対策を、最初のテーマとして取り上げます。
+      </p>
+      <div class="resource-card">
+        <h4>安全対策を考える参考動画</h4>
+        <p>NHKの番組を収録した参考動画を、Googleドライブのフォルダで案内しています。</p>
+        <p><strong>こんな関心をお持ちの方へ</strong></p>
+        <ul>
+          <li>ネット銀行やネット証券を使う上で、気をつけることを考えたい。</li>
+          <li>不正アクセスや個人情報の流出について、理解を深めたい。</li>
+        </ul>
+        <p>
+          <strong>どれから見るかの案内は準備中です。</strong><br>
+          各動画の内容と再生時間を確認し、「何が分かるか」とおすすめの順番を追記する予定です。
+          現時点では、個別の動画の要旨・視聴順は掲載していません。
+        </p>
+        <a href="https://drive.google.com/drive/folders/1JrWef93qJBiT9-wYvBQGtUJL8CGZiHeT?usp=sharing" class="gdrive-btn" target="_blank" rel="noopener">参考動画の一覧を開く（Googleドライブ・別タブ）</a>
+        <p>
+          一覧で動画をダブルクリック（スマートフォンではタップ）すると、プレビュー画面で再生できます。
+          再生可否はGoogleドライブの処理状況やブラウザーによって異なります。
+        </p>
+      </div>
+      <h3>皆さんの情報・経験・疑問もお寄せください</h3>
+      <p>
+        役に立った情報、ご自身の経験、取り上げてほしい疑問があれば、
+        <a href="mailto:shudo25support@googlegroups.com">運営委員会へお知らせください</a>。
+        個人情報や権利・利用条件、共有する範囲を確認しながら、少しずつ充実させていきます。
+      </p>
       <details id="video-sharing-discussion">
-        <summary>動画共有についての議論の記録（2026年10月17日～18日）</summary>
+        <summary>運営方針・検討経緯：動画共有について（2026年10月17日～18日）</summary>
         <p>
           同期生に役立つ動画を紹介するにあたり、公共放送の情報の活用と、著作権・利用規約、
           アクセス管理について、サイト運営者とAIアシスタントが検討しました。以下は議論の要約です。
