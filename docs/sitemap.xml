@@ -10,8 +10,14 @@
   
   <!-- イベント：定例同期会 -->
   <url>
+    <loc>https://shudo25.github.io/homepage/events/20261128/security.html</loc>
+    <lastmod>2026-11-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://shudo25.github.io/homepage/events/20261128/ethics-and-ai.html</loc>
-    <lastmod>2026-10-19</lastmod>
+    <lastmod>2026-11-06</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
