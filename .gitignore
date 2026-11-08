@@ -9,3 +9,8 @@ __pycache__/
 
 # Ignore model files
 vosk-model-small-ja-0.22/
+
+# Generated videos and temporary frame archives for the alumni presentation
+/present/20261128/*.mp4
+/present/20261128/*.webm
+/present/20261128/*.tar

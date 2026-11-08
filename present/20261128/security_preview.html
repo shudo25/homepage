@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>安全対策動画・プレビュー</title>
+  <style>
+    body { margin: 0; padding: 20px; background: #edf2f5; color: #243746; font-family: "Yu Gothic", Meiryo, sans-serif; }
+    main { max-width: 1200px; margin: auto; }
+    h1 { font-size: 24px; }
+    canvas { display: block; width: 100%; background: white; border-radius: 12px; }
+    .controls { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin: 16px 0; }
+    button, select { padding: 10px; font: inherit; }
+    input[type=range] { flex: 1; min-width: 180px; }
+    button:focus-visible, select:focus-visible, input:focus-visible { outline: 3px solid #2768ad; }
+    #status { min-height: 1.5em; }
+    .note { font-size: 14px; line-height: 1.8; }
+    .audio-sync { padding: 10px 14px; background: #fff4d8; border-left: 4px solid #ad7800; }
+    .audio-sync[data-state=current] { background: #e9f4ee; border-color: #31816b; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>安全対策動画・プレビュー</h1>
+  <p>字幕と画面の流れを確認する試作です。音声付きデータでは、ささら・タカハシのCeVIO AI音声と字幕を同期して再生します。ささらは、以前に承認した棒人間の立ち絵を使っています。</p>
+  <p id="audio-sync" class="audio-sync" role="status">台詞と音声の対応を確認しています。</p>
+  <canvas id="stage" width="1600" height="900" role="img" aria-label="ささらと高橋の安全対策紹介"></canvas>
+  <div class="controls">
+    <button id="play" disabled>再生</button>
+    <button id="restart" disabled>最初から</button>
+    <label>場面 <select id="scene" disabled></select></label>
+    <label for="seek">再生位置</label>
+    <input id="seek" type="range" min="0" max="370" value="0" step="0.1" disabled>
+    <output id="time">0:00 / 6:10</output>
+  </div>
+  <div class="controls">
+    <button id="export" disabled>WebMを書き出す</button>
+    <button id="frames" disabled>MP4用の画像を書き出す</button>
+    <button id="cancel" hidden>書き出しを中止</button>
+  </div>
+  <p id="status" role="status">素材を読み込んでいます。</p>
+  <p class="note"><a href="security-preview-animated.mp4">口パク・イラスト付きの改訂版MP4</a>も用意しています。<a href="security-preview-narrated.mp4">前版の音声付きMP4</a>は変更せず残しています。ブラウザーでのWebM書き出しは動画と同じ実時間を要するため、このページを表示したままにしてください。マイクは使用しません。</p>
+  <p class="note">ささらは、発話の音量に合わせた簡易口パクと、約5秒ごとの短いまばたきを行います。高橋の発話中や無音部分は口を閉じます。発音ごとの口の形を再現するものではありません。</p>
+  <p class="note">台本を変更したら、このフォルダーで <code>.\build_preview_data.ps1 -GenerateAudio</code> を実行してCeVIO AI音声と字幕データを更新します（CeVIO AIを起動し、両者のボイスを認証済みにしてください）。生成済み音声を使う場合は <code>-UseAudio</code>、従来の無音データを作る場合は引数なしで実行します。MP4の再作成は画像を書き出し直してから <code>.\build_security_video.ps1 -FrameArchive "TARのパス" -FfmpegPath "ffmpeg.exeのパス"</code> を実行します。FFmpegは別途必要です。</p>
+  <p class="note">CeVIOのない環境で台詞を修正したら、引数なしでプレビューを更新してください。音声生成時に記録した台詞と照合し、上に「音声は更新待ち」と表示します。画面の見出しや制作メモだけの変更は、音声の更新対象にしません。台詞が変わっていると <code>-UseAudio</code> はエラーで停止し、古い音声を新しい字幕に組み合わせません。最終的なCeVIOの抑揚調整だけなら、台詞の対応記録はそのまま使えます。</p>
+  <p class="note">動画内の安全対策は <a href="../../docs/events/20261128/security.html">対策ページ</a> に基づきます。ページの公開反映は未確認です。ささらの画像はAI生成の非公式二次創作で、公式の立ち絵ではありません。以前の承認済み画像を変更せず保存し、表示時に背景を透過処理して、口と目に簡易的な表情を重ねています。画像・音声の本番公開時の利用条件は引き続き確認します。</p>
+  <p class="note">補助イラスト：いらすとや（©みふねたかし）。ページと同じ <a href="https://www.irasutoya.com/2016/03/blog-post_264.html">パスワードを忘れた人</a>、<a href="https://www.irasutoya.com/2018/02/blog-post_552.html">二段階認証を使う人</a>、<a href="https://www.irasutoya.com/2019/03/blog-post_66.html">フィッシングサイト</a>の3点を、説明の補助として使用します。<a href="https://www.irasutoya.com/p/terms.html">利用規定</a>・<a href="https://www.irasutoya.com/p/faq.html">動画利用のFAQ</a>を2026年11月8日に確認しました。画像自体は加工していません。</p>
+  <p class="note">CeVIO AI タカハシの動作確認：<a href="audio/takahashi-test.wav">約12秒の試聴用WAV</a>。本編は台本の各発話を別途音声化しています。</p>
+  <p class="note">ローカルでの確認はHTTP経由を推奨します。共通のイラストも読み込めるよう、リポジトリのルート（homepage）で <code>python -m http.server 8913 --bind 127.0.0.1</code> を実行し、<a href="http://127.0.0.1:8913/present/20261128/security_preview.html">確認用ページ</a>を開いてください。終了時はサーバーをCtrl+Cで停止します。VS Codeの内蔵ブラウザーでは、ファイルを直接開くと素材の読み込みが止まる場合があります。</p>
+</main>
+<script src="security_preview_data.js"></script>
+<script>
+  "use strict";
+  const canvas = document.getElementById("stage");
+  const ctx = canvas.getContext("2d", {alpha: false});
+  const play = document.getElementById("play");
+  const restart = document.getElementById("restart");
+  const select = document.getElementById("scene");
+  const seek = document.getElementById("seek");
+  const time = document.getElementById("time");
+  const status = document.getElementById("status");
+  const exportButton = document.getElementById("export");
+  const cancelButton = document.getElementById("cancel");
+  const framesButton = document.getElementById("frames");
+  const turns = window.securityPreviewTurns;
+  const audioConfig = window.securityPreviewAudio;
+  const hasAudio = Boolean(audioConfig);
+  const titles = ["全部覚えなくて大丈夫", "パスワード、全部覚えられる？", "パスワードが漏れたら、もう終わり？", "偽メール、見分けられる？", "続きはページで：帰ったら一つ", "この動画も、AIと一緒に"];
+  const points = [
+    ["今日は全部覚えなくて大丈夫", "道具と、確かめる方法を知る"],
+    ["Gmail　／　銀行　／　カード会社", "異なるパスワードを、道具で管理", "作成 → 保存 → 入力"],
+    ["パスワード ＋ 別の確認", "番号を知る ≠ SMSを受け取れる", "設定は基本的にアカウントごと"],
+    ["「本日中に手続きしないと利用停止」", "説明用の架空例", "メールを離れて → 普段の公式アプリ"],
+    ["同期会ページ → 安全対策", "帰ったら、メールの守りと復旧を確認", "操作で迷ったら、一画面ずつ相談"],
+    ["台本 ＋ イラスト ＋ 編集", "AIに手伝ってもらい、人が確かめる", "伝えたいことを、一つ形に"]
+  ];
+  const images = {};
+  let position = 0;
+  let playing = false;
+  let previous = 0;
+  let recorder = null;
+  let exporting = false;
+  let aborted = false;
+  let failed = false;
+  let audioContext = null;
+  let audioSource = null;
+  let audioBuffer = null;
+  let recordingDestination = null;
+  let audioStart = 0;
+  let audioOffset = 0;
+  let playRequest = 0;
+  let narrationHash = null;
+  const duration = hasAudio ? audioConfig.duration : 370;
+  const dialogueEnd = duration - (hasAudio ? audioConfig.hold : 10);
+  const controls = [play, restart, select, seek, exportButton, framesButton];
+  seek.max = duration;
+
+  function clock(seconds) {
+    const whole = Math.floor(seconds);
+    return `${Math.floor(whole / 60)}:${String(whole % 60).padStart(2, "0")}`;
+  }
+  function text(value, x, y, size = 34, color = "#243746", align = "left") {
+    ctx.font = `${size}px "Yu Gothic", Meiryo, sans-serif`;
+    ctx.fillStyle = color;
+    ctx.textAlign = align;
+    ctx.fillText(value, x, y);
+  }
+  function lines(value, maxWidth, size) {
+    ctx.font = `${size}px "Yu Gothic", Meiryo, sans-serif`;
+    const result = [];
+    for (const paragraph of value.split(/\r?\n/)) {
+      let line = "";
+      for (const character of paragraph) {
+        if (line && ctx.measureText(line + character).width > maxWidth) {
+          result.push(line);
+          line = "";
+        }
+        line += character;
+      }
+      if (line) result.push(line);
+    }
+    return result;
+  }
+  function currentTurn() {
+    return turns.find(turn => position >= turn.start && position < turn.start + turn.duration) || turns[turns.length - 1];
+  }
+  async function sha256(bytes) {
+    const hash = await crypto.subtle.digest("SHA-256", bytes);
+    return Array.from(new Uint8Array(hash), value => value.toString(16).padStart(2, "0")).join("");
+  }
+  function visualState(at = position) {
+    const closing = at >= dialogueEnd;
+    const index = closing ? turns.length - 1 : turns.findIndex(turn => at >= turn.start && at < turn.start + turn.duration);
+    if (index < 0) throw new Error("表示する発話がタイムラインにありません。");
+    const turn = turns[index];
+    let mouth = 0;
+    if (!closing && turn.speaker === "ささら" && (!hasAudio || at < turn.start + turn.audioDuration)) {
+      if (hasAudio) {
+        const samples = audioBuffer.getChannelData(0);
+        const first = Math.max(0, Math.floor((at - 0.02) * audioBuffer.sampleRate));
+        const last = Math.min(samples.length, first + Math.floor(0.04 * audioBuffer.sampleRate));
+        let sum = 0;
+        for (let i = first; i < last; i++) sum += samples[i] * samples[i];
+        const rms = Math.sqrt(sum / (last - first));
+        if (rms >= 0.012) mouth = Math.min(3, Math.max(1, Math.round(rms * 35)));
+      } else {
+        mouth = Math.round((Math.sin((at - turn.start) * 11) + 1) * 1.5);
+      }
+    }
+    return {index, closing, mouth, blink: (at + 1.4) % 5 >= 4.86};
+  }
+  function buildSasaraStates(image) {
+    const states = [];
+    for (let blink = 0; blink < 2; blink++) {
+      states[blink] = [];
+      for (let mouth = 0; mouth < 4; mouth++) {
+        const surface = document.createElement("canvas");
+        surface.width = image.width;
+        surface.height = image.height;
+        const context = surface.getContext("2d");
+        if (!context) throw new Error("ささらの表情を描画できません。");
+        context.drawImage(image, 0, 0);
+        function ellipse(x, y, rx, ry, fill) {
+          context.beginPath();
+          context.ellipse(x, y, rx, ry, 0, 0, Math.PI * 2);
+          context.fillStyle = fill;
+          context.fill();
+        }
+        // Face masks and coordinates reuse the approved MC character's overlays.
+        if (mouth) {
+          ellipse(208, 178, 16, 8, "#fffefd");
+          ellipse(208, 178, 8, 2.5 + mouth * 1.5, "#ab635b");
+          context.strokeStyle = "#815149";
+          context.lineWidth = 1.5;
+          context.stroke();
+        }
+        if (blink) {
+          ellipse(178, 148, 9, 17, "#fffefd");
+          ellipse(238, 148, 9, 17, "#fffefd");
+          context.beginPath();
+          context.moveTo(172, 150);
+          context.quadraticCurveTo(178, 144, 184, 150);
+          context.moveTo(232, 150);
+          context.quadraticCurveTo(238, 144, 244, 150);
+          context.strokeStyle = "#382923";
+          context.lineWidth = 2.5;
+          context.lineCap = "round";
+          context.stroke();
+        }
+        states[blink][mouth] = surface;
+      }
+    }
+    return states;
+  }
+  function illustrationFor(turn) {
+    if (turn.scene === 1 && /覚えられない|パスワードマネージャー/.test(turn.text)) {
+      return {image: images.forgot, heading: "全部覚えなくて大丈夫", detail: "パスワードは道具で管理"};
+    }
+    if (turn.scene === 2) {
+      return {image: images.twoStep, heading: "パスワード ＋ 別の確認", detail: "設定は基本的にアカウントごと"};
+    }
+    if (turn.scene === 3) {
+      const example = turn === turns.find(value => value.scene === 3);
+      return {
+        image: images.phishing,
+        heading: example ? "「本日中に手続きしないと利用停止」" : "見た目では、本物と決められない",
+        detail: example ? "説明用の架空例" : "メールを離れて → 普段の公式アプリ"
+      };
+    }
+    return null;
+  }
+  function removeBorderBackground(image) {
+    const surface = document.createElement("canvas");
+    surface.width = image.naturalWidth;
+    surface.height = image.naturalHeight;
+    const context = surface.getContext("2d", {willReadFrequently: true});
+    if (!context) throw new Error("ささらの背景処理に必要なCanvasを利用できません。");
+    context.drawImage(image, 0, 0);
+    const pixels = context.getImageData(0, 0, surface.width, surface.height);
+    const data = pixels.data, width = surface.width, height = surface.height;
+    const visited = new Uint8Array(width * height), queue = new Int32Array(width * height);
+    let start = 0, end = 0;
+    function visit(x, y) {
+      if (x < 0 || y < 0 || x >= width || y >= height) return;
+      const index = y * width + x, offset = index * 4;
+      if (visited[index]) return;
+      visited[index] = 1;
+      // Reuse the MC preview's border-connected removal; keep enclosed white clothing.
+      if (data[offset] < 230 || data[offset + 1] < 225 || data[offset + 2] < 190) return;
+      queue[end++] = index;
+      data[offset + 3] = 0;
+    }
+    for (let x = 0; x < width; x++) { visit(x, 0); visit(x, height - 1); }
+    for (let y = 0; y < height; y++) { visit(0, y); visit(width - 1, y); }
+    while (start < end) {
+      const index = queue[start++], x = index % width, y = Math.floor(index / width);
+      visit(x - 1, y); visit(x + 1, y); visit(x, y - 1); visit(x, y + 1);
+    }
+    context.putImageData(pixels, 0, 0);
+    return surface;
+  }
+  function draw(forVideo = false, state = visualState()) {
+    const turn = currentTurn();
+    const closing = state.closing;
+    const scene = closing ? 5 : turn.scene;
+    ctx.fillStyle = "#fffdf8";
+    ctx.fillRect(0, 0, 1600, 900);
+    ctx.fillStyle = "#e6f0f4";
+    ctx.fillRect(0, 0, 1600, 130);
+    text("ネットを安心して使うために", 50, 52, 32, "#294c64");
+    text(titles[scene], 50, 108, 40, "#294c64");
+    text(hasAudio ? "事前制作・音声付き試作" : "事前制作・無音試作", 1550, 52, 23, "#526978", "right");
+    const pose = turn.speaker === "ささら" ? "understood" : scene === 0 || scene === 5 ? "neutral" : "thinking";
+    ctx.drawImage(images[pose], 55, 155, 230, 460);
+    text("高橋", 170, 604, 28, "#31816b", "center");
+    const sasara = images.sasaraStates[Number(state.blink)][state.mouth];
+    ctx.drawImage(sasara, 1310, 150, 280, 280 * sasara.height / sasara.width);
+    text("ささら", 1450, 604, 28, "#755378", "center");
+    const centerX = 805;
+    const illustration = closing ? null : illustrationFor(turn);
+    if (illustration) {
+      text(illustration.heading, centerX, 194, 32, "#294c64", "center");
+      const scale = Math.min(480 / illustration.image.naturalWidth, 330 / illustration.image.naturalHeight);
+      const width = illustration.image.naturalWidth * scale, height = illustration.image.naturalHeight * scale;
+      ctx.drawImage(illustration.image, centerX - width / 2, 210 + (330 - height) / 2, width, height);
+      text(illustration.detail, centerX, 576, 30, "#294c64", "center");
+      text("イラスト：いらすとや（©みふねたかし）", centerX, 608, 18, "#526978", "center");
+    } else {
+      points[scene].forEach((point, index) => {
+        ctx.fillStyle = index === 0 ? "#e9f4ee" : "#f1f4f5";
+        ctx.fillRect(340, 210 + index * 108, 930, 90);
+        text(point, centerX, 267 + index * 108, index === 0 ? 34 : 30, "#294c64", "center");
+      });
+    }
+    if (closing) text("補助イラスト：いらすとや（©みふねたかし）", centerX, 584, 24, "#526978", "center");
+    if (scene === 4 && turn.speaker === "高橋") {
+      text("「一画面ずつ教えてください」", centerX, 584, 30, "#2c5aa0", "center");
+    }
+    ctx.fillStyle = turn.speaker === "高橋" && !closing ? "#eef6f1" : "#edf3fa";
+    ctx.fillRect(40, 625, 1520, 225);
+    const caption = closing ? "同期会ページの「安全対策」から開けます。\n帰ったら、メールの2段階認証と復旧への備えを確認してみましょう。" : turn.text;
+    text(closing ? "続きはウェブページで" : turn.speaker, 70, 668, 30, turn.speaker === "高橋" ? "#31816b" : "#2c5aa0");
+    const wrapped = lines(caption.replace(/\r?\n/g, ""), 1460, 32);
+    wrapped.forEach((line, index) => text(line, 70, 714 + index * 39, 32));
+    text(hasAudio ? "音声：CeVIO AI タカハシ・さとうささら" : "音声・字幕のタイミングは仮設定", 50, 885, 22, "#526978");
+    text("さとうささら：非公式二次創作・AI生成画像", 800, 885, 22, "#526978", "center");
+    if (!forVideo) {
+      text(`${clock(position)} / ${clock(duration)}`, 1550, 885, 22, "#526978", "right");
+      ctx.fillStyle = "#31816b";
+      ctx.fillRect(0, 894, 1600 * position / duration, 6);
+    }
+    seek.value = position;
+    time.textContent = `${clock(position)} / ${clock(duration)}`;
+    select.value = scene;
+    canvas.setAttribute("aria-label", closing ? caption : `${titles[scene]}。${turn.speaker}：${turn.text}`);
+  }
+  function setPlaying(value) {
+    playing = value;
+    if (!value && hasAudio) {
+      playRequest++;
+      if (audioSource) {
+        audioSource.stop();
+        audioSource.disconnect();
+        audioSource = null;
+      }
+    }
+    previous = performance.now();
+    play.textContent = playing ? "一時停止" : "再生";
+  }
+  async function startPlaying() {
+    if (hasAudio) {
+      const request = ++playRequest;
+      await audioContext.resume();
+      if (request !== playRequest) return;
+      audioSource = audioContext.createBufferSource();
+      audioSource.buffer = audioBuffer;
+      audioSource.connect(audioContext.destination);
+      if (recordingDestination) audioSource.connect(recordingDestination);
+      audioStart = audioContext.currentTime;
+      audioOffset = position;
+      audioSource.start(0, position);
+    }
+    setPlaying(true);
+  }
+  function seekTo(value) {
+    const resume = playing;
+    if (resume) setPlaying(false);
+    position = value;
+    previous = performance.now();
+    draw();
+    if (resume && position < duration) startPlaying().catch(showError);
+  }
+  function update(now) {
+    if (playing) {
+      position = hasAudio ? Math.min(duration, audioOffset + audioContext.currentTime - audioStart) : Math.min(duration, position + (now - previous) / 1000);
+      draw();
+      if (position === duration) {
+        setPlaying(false);
+        if (exporting && recorder && recorder.state === "recording") recorder.stop();
+      }
+    }
+    previous = now;
+    if (!failed) requestAnimationFrame(update);
+  }
+  function showError(error) {
+    failed = true;
+    setPlaying(false);
+    status.textContent = `処理できませんでした：${error.message}`;
+    status.setAttribute("role", "alert");
+    controls.forEach(control => control.disabled = true);
+    if (recorder && recorder.state === "recording") {
+      aborted = true;
+      recorder.stop();
+    }
+    console.error(error);
+  }
+  async function exportVideo() {
+    if (!canvas.captureStream || !window.MediaRecorder) {
+      status.textContent = "このブラウザーは動画書き出しに対応していません。ChromeまたはEdgeで開いてください。";
+      return;
+    }
+    const formats = hasAudio ? ["video/webm;codecs=vp9,opus", "video/webm;codecs=vp8,opus"] : ["video/webm;codecs=vp9", "video/webm;codecs=vp8", "video/webm"];
+    const mimeType = formats.find(type => MediaRecorder.isTypeSupported(type));
+    if (!mimeType) {
+      status.textContent = "利用できるWebMエンコーダーがありません。ChromeまたはEdgeで開いてください。";
+      return;
+    }
+    setPlaying(false);
+    const stream = canvas.captureStream(15);
+    const chunks = [];
+    let destination = null;
+    aborted = false;
+    try {
+      if (hasAudio) {
+        await audioContext.resume();
+        destination = audioContext.createMediaStreamDestination();
+        recordingDestination = destination;
+        stream.addTrack(destination.stream.getAudioTracks()[0]);
+      }
+      recorder = new MediaRecorder(stream, {mimeType, videoBitsPerSecond: 2500000});
+      recorder.ondataavailable = event => { if (event.data.size) chunks.push(event.data); };
+      recorder.onerror = event => showError(event.error || new Error("動画の記録に失敗しました。"));
+      recorder.onstop = () => {
+        recordingDestination = null;
+        stream.getTracks().forEach(track => track.stop());
+        exporting = false;
+        recorder = null;
+        controls.forEach(control => control.disabled = failed);
+        framesButton.disabled = failed || !hasAudio;
+        cancelButton.hidden = true;
+        if (failed) return;
+        if (aborted) {
+          status.textContent = "書き出しを中止しました。未完成の動画は保存していません。";
+          return;
+        }
+        if (!chunks.length) {
+          showError(new Error("動画データが生成されませんでした。"));
+          return;
+        }
+        const url = URL.createObjectURL(new Blob(chunks, {type: mimeType}));
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = hasAudio ? "security-preview-animated.webm" : "security-preview-sasara-silent.webm";
+        link.click();
+        setTimeout(() => URL.revokeObjectURL(url), 60000);
+        status.textContent = hasAudio ? "音声付きWebMを書き出しました。" : "無音WebMを書き出しました。";
+      };
+      exporting = true;
+      controls.forEach(control => control.disabled = true);
+      cancelButton.hidden = false;
+      position = 0;
+      draw();
+      recorder.start(1000);
+      await startPlaying();
+      if (aborted) return;
+      status.textContent = "動画を書き出しています。このページを表示したままお待ちください。";
+    } catch (error) {
+      recordingDestination = null;
+      stream.getTracks().forEach(track => track.stop());
+      showError(error);
+    }
+  }
+  async function exportFrames() {
+    const original = position;
+    setPlaying(false);
+    controls.forEach(control => control.disabled = true);
+    status.textContent = "MP4用の画像を準備しています。";
+    const parts = [];
+    const encoder = new TextEncoder();
+    try {
+      function addFile(name, blob) {
+        const header = new Uint8Array(512);
+        const put = (value, offset) => header.set(encoder.encode(value), offset);
+        put(name, 0);
+        put("0000644\0", 100);
+        put("0000000\0", 108);
+        put("0000000\0", 116);
+        put(`${blob.size.toString(8).padStart(11, "0")}\0`, 124);
+        put("00000000000\0", 136);
+        put("        ", 148);
+        put("0", 156);
+        put("ustar\0", 257);
+        put("00", 263);
+        const checksum = header.reduce((sum, value) => sum + value, 0);
+        put(`${checksum.toString(8).padStart(6, "0")}\0 `, 148);
+        parts.push(header, blob, new Uint8Array((512 - blob.size % 512) % 512));
+      }
+      const response = await fetch("security_preview_data.js");
+      if (!response.ok) throw new Error("字幕データの照合情報を読み込めません。");
+      const dataHash = await sha256(await response.arrayBuffer());
+      const fps = 15;
+      const cache = new Map();
+      const segments = [];
+      for (let i = 0; i < Math.ceil(duration * fps); i++) {
+        position = i / fps;
+        const state = visualState();
+        const key = `${state.index}-${state.closing}-${state.mouth}-${state.blink}`;
+        let name = cache.get(key);
+        if (!name) {
+          draw(true, state);
+          const blob = await new Promise((resolve, reject) => canvas.toBlob(value => value ? resolve(value) : reject(new Error("画像を生成できません。")), "image/png"));
+          name = `frame-${String(cache.size + 1).padStart(3, "0")}.png`;
+          cache.set(key, name);
+          addFile(name, blob);
+          status.textContent = `MP4用の画像を準備しています：${clock(position)} / ${clock(duration)}`;
+        }
+        const seconds = Math.min(1 / fps, duration - position);
+        const last = segments[segments.length - 1];
+        if (last && last.file === name) last.duration += seconds;
+        else segments.push({file: name, duration: seconds});
+      }
+      const manifest = {version: 1, fps, duration, dataHash, audioHash: narrationHash, segments};
+      addFile("frames.json", new Blob([JSON.stringify(manifest)], {type: "application/json"}));
+      parts.push(new Uint8Array(1024));
+      const url = URL.createObjectURL(new Blob(parts, {type: "application/x-tar"}));
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "security-video-frames.tar";
+      link.click();
+      setTimeout(() => URL.revokeObjectURL(url), 60000);
+      status.textContent = "画像TARを書き出しました。build_security_video.ps1で音声付きMP4を作成できます。";
+    } finally {
+      position = original;
+      draw();
+      controls.forEach(control => control.disabled = failed);
+      framesButton.disabled = failed || !hasAudio;
+    }
+  }
+  play.addEventListener("click", () => {
+    if (position >= duration) position = 0;
+    if (playing) setPlaying(false);
+    else startPlaying().catch(showError);
+    draw();
+  });
+  restart.addEventListener("click", () => { setPlaying(false); seekTo(0); });
+  seek.addEventListener("input", () => seekTo(Number(seek.value)));
+  select.addEventListener("change", () => {
+    seekTo(turns.find(turn => turn.scene === Number(select.value)).start);
+  });
+  exportButton.addEventListener("click", exportVideo);
+  framesButton.addEventListener("click", () => exportFrames().catch(showError));
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden && exporting) showError(new Error("ページが非表示になったため書き出しを中止しました。ページを表示したまま再読み込みしてやり直してください。"));
+  });
+  cancelButton.addEventListener("click", () => {
+    aborted = true;
+    setPlaying(false);
+    if (recorder && recorder.state === "recording") recorder.stop();
+  });
+  async function initialize() {
+    if (!ctx || !Array.isArray(turns) || turns.length === 0) {
+      throw new Error("字幕データを読み込めません。build_preview_data.ps1を実行し、生成したファイルをこのページと同じ場所に置いてください。");
+    }
+    const audioState = window.securityPreviewAudioStatus;
+    const messages = {
+      current: "台詞と保存済み音声は一致しています。",
+      outdated: "台詞を変更したため、音声は更新待ちです。",
+      missing: "音声ファイルがそろっていません。",
+      unverified: "音声と台詞の対応記録がありません（未確認）。"
+    };
+    if (!Object.prototype.hasOwnProperty.call(messages, audioState)) throw new Error("音声の対応状態を読み込めません。プレビューデータを再生成してください。");
+    const sync = document.getElementById("audio-sync");
+    sync.textContent = messages[audioState] + (hasAudio ? "" : " 現在は無音で確認できます。");
+    sync.dataset.state = audioState;
+    if (hasAudio && audioState !== "current") throw new Error("現在の台詞に対応する音声ではありません。無音データを作るか、音声を生成し直してください。");
+    titles.forEach((title, index) => {
+      const option = document.createElement("option");
+      option.value = index;
+      option.textContent = `${index + 1}. ${title}`;
+      select.appendChild(option);
+    });
+    for (const pose of ["neutral", "thinking", "understood"]) {
+      const image = new Image();
+      image.src = `figs/takahashi-${pose}.png`;
+      await image.decode();
+      images[pose] = image;
+    }
+    const sasara = new Image();
+    sasara.src = "figs/sasara-front.png";
+    await sasara.decode();
+    if (sasara.naturalWidth !== 465 || sasara.naturalHeight !== 715) throw new Error("ささらの画像サイズが表情処理の座標と一致しません。");
+    images.sasara = removeBorderBackground(sasara);
+    images.sasaraStates = buildSasaraStates(images.sasara);
+    for (const [name, file] of Object.entries({
+      forgot: "computer_password_wasureta.png",
+      twoStep: "internet_nidankai_ninsyou_man.png",
+      phishing: "website_phishing.png"
+    })) {
+      const image = new Image();
+      image.src = `../../docs/events/20261128/figs/${file}`;
+      await image.decode();
+      images[name] = image;
+    }
+    if (hasAudio) {
+      audioContext = new AudioContext({sampleRate: 48000});
+      const response = await fetch(audioConfig.src);
+      if (!response.ok) throw new Error(`本編音声を読み込めません（HTTP ${response.status}）。-GenerateAudioまたは-UseAudioでデータを生成してください。`);
+      const bytes = await response.arrayBuffer();
+      narrationHash = await sha256(bytes);
+      audioBuffer = await audioContext.decodeAudioData(bytes);
+      if (Math.abs(audioBuffer.duration - duration) > 0.02) throw new Error("音声と字幕の長さが一致しません。-UseAudioで字幕データを再生成してください。");
+    }
+    for (const turn of turns) {
+      if (lines(turn.text.replace(/\r?\n/g, ""), 1460, 32).length > 4) {
+        throw new Error(`字幕が画面に収まりません：${turn.speaker}「${turn.text.slice(0, 20)}」`);
+      }
+    }
+    controls.forEach(control => control.disabled = false);
+    framesButton.disabled = !hasAudio;
+    exportButton.textContent = hasAudio ? "音声付きWebMを書き出す" : "無音WebMを書き出す";
+    status.textContent = hasAudio ? "準備できました。CeVIO AI音声と字幕を同期して再生します。" : "準備できました。音声はありません。";
+    draw();
+    requestAnimationFrame(update);
+  }
+  initialize().catch(showError);
+</script>
+</body>
+</html>
