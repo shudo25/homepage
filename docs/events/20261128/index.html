@@ -30,6 +30,10 @@
     .venue-photo { text-align: center; }
     .venue-photo img { max-width: 300px; width: 100%; height: auto; }
     .venue-info a { overflow-wrap: anywhere; }
+    .security-layout { display: flex; align-items: center; gap: 24px; }
+    .security-layout > div { flex: 1; min-width: 0; }
+    .security-illustration { flex: 0 1 440px; min-width: 0; margin: 0; }
+    .security-illustration img { display: block; width: 100%; height: auto; }
     .schedule { list-style: none; padding-left: 0; }
     .schedule > li { margin: 18px 0; }
     .schedule ul { padding-left: 24px; line-height: 1.9; }
@@ -41,6 +45,8 @@
       .assistant-layout { flex-direction: column; align-items: stretch; }
       .assistant-portrait { flex: none; width: 100%; max-width: 300px; margin: 0 auto; }
       .venue-layout { flex-direction: column; align-items: stretch; }
+      .security-layout { flex-direction: column; align-items: stretch; }
+      .security-illustration { flex: none; width: 100%; max-width: 440px; align-self: center; }
     }
   </style>
 </head>
@@ -64,7 +70,7 @@
         <li><strong>14:00　開会</strong>
           <ul>
             <li>会長あいさつ＆乾杯</li>
-            <li>冒頭セッション「倫理とAI」（案・15分以内／ささらのアシストを検討）</li>
+            <li>冒頭セッション「ネットの安全対策」（案・15分以内／ささらのアシストを検討）</li>
             <li>「気楽に集まる会」状況報告</li>
             <li>歓談</li>
             <li>自由スピーチ（前半）</li>
@@ -120,8 +126,16 @@
 </div>
 
 <div class="reference-info">
+<div class="security-layout">
+<div>
 <h2>🛡️ 安全対策</h2>
 <p><strong><a href="security.html">ネットを安心して使うために ― まず確認したい5つのこと</a></strong></p>
+<p>ささらと高橋の対話で、身近な安全対策を紹介する動画を準備中です。</p>
+</div>
+<figure class="security-illustration">
+  <a href="security.html"><img src="figs/security-dialogue.png" width="1000" height="620" alt="高橋「ネットの安全、何から始める？」 ささら「まずはメールを守ることから！」と対話する二人の棒人間"></a>
+</figure>
+</div>
 </div>
 
 <div class="reference-info">
