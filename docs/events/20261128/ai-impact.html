@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AIは鉄砲か、黒船か、産業革命か？ | 修道25回</title>
+  <meta name="description" content="2026年11月28日修道25回同期会の基調メッセージ資料。LLMからAgent、Group of agentsへの広がりを図と事例で考えます。">
+  <link rel="canonical" href="https://shudo25.github.io/homepage/events/20261128/ai-impact.html">
+  <link rel="stylesheet" href="../../common/responsive.css">
+  <style>
+    body { background: #fafafa; padding: 20px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    main { max-width: 1000px; margin: 0 auto; color: #333; line-height: 1.9; }
+    h1 { color: #2c5aa0; border-bottom: 2px solid #4169e1; padding-bottom: 12px; }
+    h2, h3 { color: #294c64; }
+    section { background: white; padding: 24px; margin: 24px 0; border-left: 4px solid #31816b; border-radius: 5px; }
+    .lead { background: #f0f8ff; padding: 20px; border-radius: 5px; }
+    .note { background: #fff8f0; padding: 18px 20px; border-left: 4px solid #ff8c00; border-radius: 5px; }
+    .figure { margin: 24px 0; text-align: center; }
+    .figure img { display: block; width: 100%; height: auto; margin: 0 auto; border: 1px solid #ddd; border-radius: 5px; }
+    .llm-figure img { max-width: 1000px; }
+    .agent-figure img { max-width: 1000px; }
+    .navier-figure img { max-width: 720px; }
+    .hf-incident-figure img { max-width: 720px; }
+    .history-figures { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin: 24px 0; }
+    .history-figures .figure { margin: 0; }
+    .history-figures figcaption { font-size: 0.88em; }
+    figcaption { margin-top: 10px; color: #555; font-size: 0.95em; text-align: left; }
+    .timeline > li { margin: 14px 0; }
+    .cases > li { margin: 20px 0; }
+    blockquote { margin: 18px 0; padding: 16px 20px; background: #f3faf7; border-left: 3px solid #31816b; }
+    a { overflow-wrap: anywhere; }
+    a:focus-visible { outline: 3px solid #4169e1; outline-offset: 3px; }
+    @media (max-width: 600px) {
+      body { padding: 10px; }
+      h1 { font-size: 26px; }
+      section { padding: 18px; }
+      .lead, .note { padding: 14px; }
+      .history-figures { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+<main>
+  <nav aria-label="ページ案内"><a href="index.html#keynote">← 同期会の案内へ戻る</a></nav>
+  <h1>AIは鉄砲か、黒船か、産業革命か？</h1>
+  <p>2026年11月28日 修道25回同期会・基調メッセージの参考ページ</p>
+  <div class="lead">
+    <p><strong>AIの新製品の優劣ではなく、なぜできることが広がり、社会にどんな影響をもたらすのかを考えます。</strong></p>
+    <p>一つの言語モデルが答える段階から、ツールを使って仕事を進めるAgent、役割を分けて連携するGroup of agentsへ。そこに生まれる力と、確認・責任の課題を、図と事例を手がかりに考えます。</p>
+  </div>
+
+  <section aria-labelledby="llm-heading">
+    <h2 id="llm-heading">1. LLM――AIが言葉やコードを作れる土台</h2>
+    <p>まず、昨年の準備幹事会で使った「大規模言語モデル（LLM）の仕組み」の図を見ます。大量の文章やコードなどから言葉やコードのパターンを学んだモデルが、利用時には入力された指示や文脈を踏まえて、文章やコードを生成するという大枠を示しています。</p>
+    <figure class="figure llm-figure">
+      <img src="../../ci_initiative/figs/llm-briefly.jpg" alt="大量の情報からの学習と、入力・会話の文脈を使ったLLMの活用を示す概念図" loading="lazy">
+      <figcaption>「大規模言語モデル（LLM）という仕組み（超簡略版）」。2025年11月4日の準備幹事会ページで使った図です。</figcaption>
+    </figure>
+    <div class="note">
+      <p><strong>図の読み方：</strong>中央のベクトル図は仕組みをイメージするためのもので、実際のモデル内部をそのまま描いたものではありません。また、右側の「記憶」は会話履歴やサービス側の保存機能などを含む概念です。会話のたびに基盤モデル自体が自動で再学習する、という意味ではありません。</p>
+      <p>「世界中の知識が全部詰まっている」というより、学習した情報の一部をモデルの中のパターンとして利用している、と考えるのが近いでしょう。内容を完全に覚えているわけでも、常に正しい答えを取り出せるわけでもありません。</p>
+    </div>
+    <h3>なぜ、アプリを作れるのか</h3>
+    <ol>
+      <li>モデルは、学習した文章・コードや設計例から、よくある書き方や構造を身につけています。</li>
+      <li>人は作りたいものを日常の言葉で説明でき、モデルはその説明に合うコードの形を提案できます。</li>
+      <li>アプリ作成サービスでは、コードの編集だけでなく、実行・画面表示・修正を助ける道具も組み合わせることがあります。結果を見ながら作り直せるため、専門家でなくても試作品を形にしやすくなります。</li>
+      <li>ただし、これはLLMだけで完成品が保証されるという意味ではありません。動作確認、個人情報の扱い、安全性、公開後の保守は別に考える必要があります。</li>
+    </ol>
+  </section>
+
+  <section aria-labelledby="agents-heading">
+    <h2 id="agents-heading">2. ChatからAgent、Group of agentsへ</h2>
+    <p>LLMを単体で使うだけでなく、目標を受けて手順を組み立て、検索やプログラムなどのツールを使い、結果を見ながら作業を進める仕組みがAgentです。複数のAgentに調査・整理・確認などを分担させ、結果を持ち寄る構成もあります。</p>
+    <figure class="figure agent-figure">
+      <img src="figs/ai-evolution-map.svg" alt="人とLLMの間に、直接対話、単独Agent、役割分担するAgent群が加わる様子を示す概念図" loading="lazy">
+      <figcaption>Chat → Agent → Group of agents。各段階は一方向に入れ替わるとは限らず、実際のAgentの構成もサービスによって異なります。</figcaption>
+    </figure>
+    <p>役割分担や並行作業によって、個人では難しい仕事を速く進められる可能性があります。一方、途中の誤りが次の作業に引き継がれたり、ツールへの権限を通じて現実の操作につながったりすることもあります。重要なのは「AIが意思を持って暴走する」と決めつけることではなく、何を任せ、どんな権限を与え、どこで人が確かめるかを考えることです。</p>
+  </section>
+
+  <section aria-labelledby="cases-heading">
+    <h2 id="cases-heading">3. 変化を想像するためのキー事例</h2>
+    <ul class="cases">
+      <li>
+        <h3>誰でもアプリを作れるようになる？</h3>
+        <p>クローズアップ現代「誰でもアプリが作れちゃう！ ＡＩ自作アプリの光と影」（2026年11月18日放送）を入口に、アプリ開発の裾野が広がる可能性と、作った後の安全性・品質・保守を誰が担うのかを考えます。</p>
+      </li>
+      <li>
+        <h3>Navier–Stokes問題――AIの「証明」とは何か</h3>
+        <p>Navier–Stokes方程式は、水や空気など流体の動きを表す方程式です。OpenAIは2026年9月、滑らかな流れから始め、滑らかな外力を加える条件でも、速度が有限時間で際限なく大きくなる「特異点」が生じ得る、という解答を発表しました。この問題はクレイ数学研究所の<a href="https://ja.wikipedia.org/wiki/%E3%83%9F%E3%83%AC%E3%83%8B%E3%82%A2%E3%83%A0%E6%87%B8%E8%B3%9E%E5%95%8F%E9%A1%8C">ミレニアム懸賞問題</a>の一つで、懸賞金は100万ドルです。ただし、OpenAIの発表が賞金問題の解決として認定済みという意味ではありません。</p>
+        <figure class="figure navier-figure">
+          <a href="https://www.youtube.com/watch?v=PsWR1rQEWYo">
+            <img src="figs/navier-stokes.png" alt="Navier–Stokes方程式の表示と、渦を巻く海面を描いた動画の一場面" loading="lazy">
+          </a>
+          <figcaption>動画中の一場面を引用。Quanta Magazine, <a href="https://www.youtube.com/watch?v=PsWR1rQEWYo">“Why Navier-Stokes Pushes Math and Physics to the Edge”</a>（YouTube）。画像をクリックすると動画を開きます。</figcaption>
+        </figure>
+        <h4>なぜ、AI群で取り組めたのか</h4>
+        <p>OpenAIの説明によれば、数学性能を高めた社内モデルに、問題の異なる形を割り当てたAgent群を並行して動かしました。Agentは検索用の資料やコード実行の道具を使い、別々の方向を探ります。関連するEuler方程式の問題で手がかりを得ると、その結果を他のAgent群にも共有し、Navier–Stokes問題に計算資源を集中させました。約1万のAgentが約88時間探索し、証明のLean形式化と検証にはさらに約17時間を要した、と報告されています。</p>
+        <p><strong>大筋の「なぜ」：</strong>人間が積み上げてきた数学の知識を土台に、強化されたモデルが証明の候補を作り、Agent群が複数の道筋を大量・並行に試し、見込みのある手がかりを共有できたからです。「人間が何十年も考えつかなかった答えを、AIが突然ひらめいた」というより、人間の研究の蓄積に、大規模な探索と結果の統合を機械的に続ける力が加わった、と見るのが適切です。</p>
+        <p>Leanによる検証は、形式化された証明の論理を機械的に確認する助けになりますが、問題設定との対応や証明の意味、先行研究との関係まで自動で決着するわけではありません。数学者による検討と、誰の貢献をどう認めるかも別の課題です。</p>
+        <p><a href="https://openai.com/index/navier-stokes-solution">OpenAIの発表（方法・数値の説明）</a> · <a href="https://www.claymath.org/millennium/navier-stokes-equation/">Clay Mathematics Instituteの問題ページ（現在の表示：Active）</a></p>
+        <p><a href="https://en.wikipedia.org/wiki/Navier%E2%80%93Stokes_priority_controversy">概要と論争の経緯（英語版Wikipedia）</a></p>
+      </li>
+      <li>
+        <h3>Hugging Faceの事例――Agentをどう管理するか</h3>
+        <p>OpenAIのAgentを使ったサイバー能力評価と、Hugging Faceをめぐるインシデントとして報じられた事例です。英語版Wikipediaの当該記事では、少なくとも1,200のAI Agentが関与したとされています。ここでは技術的な手口ではなく、実行環境の隔離、活動の監視、権限の制限、人による停止判断という管理上の論点に注目します。AIに意識や意図がある証拠として扱うものではありません。</p>
+        <figure class="figure hf-incident-figure">
+          <img src="figs/huggingface-incident.png" alt="多数のAIエージェントからHugging Faceの建物へ線が伸びる図。建物にHugging Faceのロゴがある" loading="lazy">
+          <figcaption>背景図の一場面：Chief Agent Officer, “OpenAI's AI Agents Secretly Organized. Then They Attacked.”（<a href="https://www.youtube.com/watch?v=oRAapW-0NE0">YouTube動画</a>）。Hugging Faceのロゴ：Victor（Hugging Face Staff）による“Hugging Emoji”。<a href="https://commons.wikimedia.org/wiki/File:Hf-logo-without-title.svg">Wikimedia Commons</a>掲載のApache License 2.0に基づいて使用（<a href="figs/APACHE-2.0.txt">ライセンス全文</a>）。</figcaption>
+        </figure>
+        <p>Hugging Faceのサービスや役割の概要：<a href="https://note.com/oft0nland/n/nf0a3fff80985">「ところでHugging Faceって何？という人のためのまとめ」（note）</a></p>
+        <p><a href="https://en.wikipedia.org/wiki/OpenAI_rogue_agent_breach_of_Hugging_Face">事件の概要（英語版Wikipedia）</a></p>
+        <p><small>この事例の詳細や評価は、当事者の発表と独立した報道を照合して確認する必要があります。上記記事にも、出典の偏りに関する注意表示があります。</small></p>
+      </li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="history-heading">
+    <h2 id="history-heading">4. AIは鉄砲か、黒船か、産業革命か</h2>
+    <p>これは歴史との厳密な同一視ではなく、AIの影響のどの側面に注目するかを考える比喩です。鉄砲は強力な技術の普及、黒船は外からの衝撃と制度変化、産業革命は仕事や経済の長期的な組み替えを連想させます。AIは、その一つに当てはまるのか、それとも複数の側面を持つのでしょうか。</p>
+    <div class="history-figures">
+      <figure class="figure">
+        <a href="https://www.youtube.com/watch?v=hYVu2PLYzVI">
+          <img src="figs/Battle-Nagashino.png" alt="長篠の戦いを描いた屏風絵の動画の一場面" loading="lazy">
+        </a>
+        <figcaption>鉄砲の時代を考える一場面：YouTube高校 / 日本史・世界史「【安土桃山時代】156 織田政権発足と長篠の戦い【日本史】」（<a href="https://www.youtube.com/watch?v=hYVu2PLYzVI">YouTube動画</a>）。</figcaption>
+      </figure>
+      <figure class="figure">
+        <a href="https://www.youtube.com/watch?v=BbqYiu5x1FE">
+          <img src="figs/kurofune.png" alt="蒸気船の黒船来航を伝える動画の一場面" loading="lazy">
+        </a>
+        <figcaption>黒船来航を考える一場面：YouTube高校 / 日本史・世界史「【幕末】190 黒船来航と日米和親条約【日本史】」（<a href="https://www.youtube.com/watch?v=BbqYiu5x1FE">YouTube動画</a>）。</figcaption>
+      </figure>
+      <figure class="figure">
+        <a href="https://www.youtube.com/watch?v=Ah5la4Xn-Bw">
+          <img src="figs/industrial-revolution.png" alt="工場と蒸気機関車を描いた産業革命の動画の一場面" loading="lazy">
+        </a>
+        <figcaption>産業革命を考える一場面：歴史から学ぶ知識「1700年のイギリスから始まる産業革命の物語」（<a href="https://www.youtube.com/watch?v=Ah5la4Xn-Bw">YouTube動画</a>）。</figcaption>
+      </figure>
+    </div>
+    <p>「人新世」という言葉も、人間活動が地球システムに及ぼす影響の大きさを考える視点として紹介できます。ただし、正式な地質年代として採択された名称ではありません。また、AIだけが地球規模の変化を生むという意味でもありません。AIによって人間の活動や判断の力がどう拡大するか、という問いにつなげます。</p>
+    <p><a href="https://ja.wikipedia.org/wiki/%E4%BA%BA%E6%96%B0%E4%B8%96">人新世（概念の概要）</a></p>
+    <h3>参考情報</h3>
+    <ul>
+      <li><a href="https://zenn.dev/tokium_dev/articles/ai-revolution-vs-past-revolutions">「AI革命は産業革命の繰り返しか？ 3つの共通点と決定的な違いから考える、これからの働き方」</a>（TOKIUMプロダクトチーム テックブログ）</li>
+      <li><a href="https://www5.cao.go.jp/keizai3/2016/0117nk/n16_2_1.html">内閣府「第2章 新たな産業変化への対応（第1節）— 第4次産業革命のインパクト」</a>（第1〜3次産業革命との位置づけや、AI等が経済・雇用に及ぼす影響を整理した資料）</li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="why-check-heading">
+    <h2 id="why-check-heading">5. 「なぜ？」に答えられているかを確かめる</h2>
+    <p>一つの事例について、次の四つを一文ずつ埋めてみます。全部がつながれば、大筋の「なぜ」を説明できています。</p>
+    <ol class="why-checks">
+      <li><strong>なぜ可能になった？</strong>――新しく使える能力や条件は何か。</li>
+      <li><strong>どうやって結果につながる？</strong>――原因と結果の間にある仕組みは何か。</li>
+      <li><strong>何が変わる？</strong>――その仕組みで、誰が何をできるようになるか。</li>
+      <li><strong>どこまで言える？</strong>――必要な確認、限界、まだ分からない点は何か。</li>
+    </ol>
+    <h3>よくある疑問に当てはめると</h3>
+    <ul class="why-checks">
+      <li><strong>なぜAgentは、チャットより多くの作業ができる？</strong><br>モデルにツール利用と、実行結果を見て次の手順へ進む仕組みが加わるからです。使えるツールや権限の範囲を超えて何でもできるわけではありません。</li>
+      <li><strong>なぜ複数のAgentは強力になり得る？</strong><br>仕事を分けて並行して進め、結果をまとめられるからです。一方、途中の誤りが受け渡されて広がることもあります。</li>
+      <li><strong>なぜAI群は、長年未解決だったNavier–Stokes問題に答えを出せたと発表できた？</strong><br>OpenAIの説明では、数学性能を高めたモデルと大規模な計算資源を使い、Agent群が問題の別々の形や解法を並行して探索し、関連問題で得た手がかりを共有しました。人類の数学的蓄積を土台に探索の量と速度を拡張した、というのが大筋です。ただし発表と数学界による検証・認定は区別します。</li>
+      <li><strong>なぜ同じ仕組みがリスクにもなる？</strong><br>モデルの出力がツールを通じて実際の操作につながり、人の確認が遅れたり足りなかったりすると、誤りの影響も大きくなり得るからです。意識や悪意を仮定しなくても説明できます。</li>
+      <li><strong>なぜ産業革命にたとえる？</strong><br>知的な作業の一部を、より多くの人が、より速く行えるようになれば、仕事や役割分担まで変わる可能性があるからです。社会が実際にどう変わるかは、使い方や制度にも左右されます。</li>
+    </ul>
+    <p class="note"><strong>短い発表での合格目安：</strong>聞き手が「原因 → 仕組み → 起きる変化」を自分の言葉で言い直せて、同時に一つの限界も分かること。説明を簡単にするために細部を省いても、因果のつなぎ目を作り話で埋めないようにします。</p>
+    <p>この「なぜ」の確認と、事例の事実確認は別に行います。日付・何が起きたか・誰が発表したか・第三者がどう検証したかを、出典と照らして確認します。</p>
+  </section>
+
+  <section aria-labelledby="session-heading">
+    <h2 id="session-heading">6. 15分の基調メッセージ構成案</h2>
+    <ol class="timeline">
+      <li><strong>0:00–1:30　問いかけ：</strong>AIは鉄砲か、黒船か、産業革命か。</li>
+      <li><strong>1:30–4:00　土台：</strong>LLMの図で、学習したモデルが指示や文脈をもとに生成する大枠を共有。</li>
+      <li><strong>4:00–6:00　広がり：</strong>Agent、Group of agentsの図で、ツール利用や役割分担ができることを示す。</li>
+      <li><strong>6:00–13:30　事例：</strong>アプリ作成、Navier–Stokesをめぐる発表、Hugging Faceのインシデントから、可能性と課題を一つずつ拾う。</li>
+      <li><strong>13:30–15:00　同期生への問い：</strong>AIに何を任せ、どこで人が確かめるのか。変えてよいことと、変えてはいけないことは何か。</li>
+    </ol>
+    <blockquote>
+      <p>AIの進歩を、驚くべき性能のニュースとして眺めるだけでなく、私たちの力や責任がどう変わるのかを、皆さんと一緒に考えたいと思います。</p>
+    </blockquote>
+    <p>このページは基調メッセージの事前案内と事後参照のための資料です。事例の詳細や評価を確定した結論として示すものではありません。</p>
+  </section>
+
+  <nav aria-label="ページ案内"><a href="index.html#keynote">← 同期会の案内へ戻る</a></nav>
+</main>
+</body>
+</html>

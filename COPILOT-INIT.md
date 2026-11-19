@@ -79,6 +79,14 @@ codes/                  # Utility scripts
 - **Self-contained pages**: Each section can stand alone
 - **SEO considerations**: Proper meta tags, structured data
 
+#### YouTube動画の一場面を資料に使う場合
+
+- 動画の一場面を使うことを、機械的に禁止したり、毎回の事前許諾を必須にしたりしない。日本の著作権法上の引用に当たるかは、用途や掲載方法などを踏まえて判断し、最終的な掲載判断はサイト管理者に委ねる。
+- 本文の説明に関係する必要最小限の静止画を使い、引用部分が分かるように区別する。可能なら画像から元動画へリンクし、チャンネル・作者名、動画タイトル、URL、分かる場合は時刻を出典として示す。出典表示だけで許諾や適法性が保証されるわけではない。
+- YouTubeは第三者動画の利用許諾を出さず、権利者への直接連絡を案内している。動画のライセンス表示を確認し、CC BYの場合は条件に従う。公式プレーヤーの埋め込みは、静止画を保存して掲載することとは別の方法。
+- ユーザーが用途とリスクを理解して掲載判断をしている場合、同様の小規模な利用について許諾確認を繰り返し求めない。具体的な懸念があれば簡潔に示し、長尺・大量の転載や元動画の代替となる使い方など、判断を変える事情がある場合に限って個別に再確認する。
+- 参考：[著作権法](https://laws.e-gov.go.jp/law/345AC0000000048)、[YouTubeのライセンスの種類](https://support.google.com/youtube/answer/2797468?hl=ja)、[YouTube動画の埋め込み](https://support.google.com/youtube/answer/171780?hl=ja)
+
 ### 3. **Python Code Conventions**
 
 - **Python version**: 3.11+ preferred
@@ -268,5 +276,5 @@ python present/create_ci_presentation_v3_final.py
 
 ---
 
-**Last updated**: 2026-02-11  
+**Last updated**: 2026-11-19
 **Standard version**: v0.4

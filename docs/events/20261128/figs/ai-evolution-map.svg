@@ -1,0 +1,127 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-labelledby="title description">
+  <title id="title">ChatからAgent、Group of agentsへ</title>
+  <desc id="description">人は左、共有LLMは右に置き、その間に入る仕組みが、直接対話、単独Agent、役割分担するAgent群へ変化する様子を示す概念図。</desc>
+  <defs>
+    <marker id="arrow-teal" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0 0L10 4L0 8Z" fill="#287F78"/>
+    </marker>
+    <marker id="arrow-amber" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0 0L10 4L0 8Z" fill="#D99B3D"/>
+    </marker>
+    <g id="person">
+      <circle cx="0" cy="-23" r="11" fill="#18384A"/>
+      <path d="M0-10V16M-17 1L0-4L17 1M-12 38L0 16L12 38" fill="none" stroke="#18384A" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+    <g id="agent">
+      <path d="M0-20V-27" fill="none" stroke="#287F78" stroke-width="3" stroke-linecap="round"/>
+      <circle cx="0" cy="-29" r="3" fill="#D99B3D"/>
+      <rect x="-18" y="-20" width="36" height="29" rx="9" fill="#D8EFEB" stroke="#287F78" stroke-width="2.5"/>
+      <circle cx="-6" cy="-6" r="2.5" fill="#18384A"/>
+      <circle cx="6" cy="-6" r="2.5" fill="#18384A"/>
+      <path d="M-6 2Q0 6 6 2M0 9V21M-12 15H12M-8 21L-12 28M8 21L12 28" fill="none" stroke="#287F78" stroke-width="2.5" stroke-linecap="round"/>
+    </g>
+    <g id="llm">
+      <circle r="34" fill="#E8EEF7" stroke="#54749A" stroke-width="2.5"/>
+      <path d="M-15-10L0-17L15-9M-15-10L-12 11L4 17L15-9M-12 11L0-2L15-9M0-17L0-2L4 17" fill="none" stroke="#54749A" stroke-width="2"/>
+      <circle cx="-15" cy="-10" r="4" fill="#287F78"/>
+      <circle cx="0" cy="-17" r="4" fill="#D99B3D"/>
+      <circle cx="15" cy="-9" r="4" fill="#287F78"/>
+      <circle cx="-12" cy="11" r="4" fill="#D99B3D"/>
+      <circle cx="0" cy="-2" r="4" fill="#287F78"/>
+      <circle cx="4" cy="17" r="4" fill="#D99B3D"/>
+    </g>
+    <style>
+      text { font-family: "Yu Gothic UI", "Meiryo", sans-serif; fill: #18384A; }
+      .title { font-size: 42px; font-weight: 700; }
+      .subtitle { font-size: 19px; fill: #58707C; }
+      .stage-number { font-size: 14px; font-weight: 700; letter-spacing: 1.5px; fill: #287F78; }
+      .stage-title { font-size: 25px; font-weight: 700; }
+      .stage-note { font-size: 15px; fill: #58707C; }
+      .flow { font-size: 15px; font-weight: 600; }
+      .small { font-size: 13px; fill: #58707C; }
+      .role { font-size: 14px; font-weight: 600; }
+      .panel { fill: #FFFFFF; stroke: #E2E8E6; stroke-width: 1.5; }
+    </style>
+  </defs>
+
+  <rect width="1600" height="900" fill="#F4F5F1"/>
+  <text x="72" y="70" class="title">Chat → Agent → Group of agents</text>
+  <text x="74" y="111" class="subtitle">人とLLMの間に、作業を進める仕組みと役割分担が加わっていく</text>
+  <rect x="1080" y="54" width="447" height="48" rx="24" fill="#E5EFED"/>
+  <circle cx="1107" cy="78" r="7" fill="#287F78"/>
+  <text x="1125" y="84" font-size="16" font-weight="600">共有LLM × 一人ひとりの文脈</text>
+
+  <rect x="56" y="150" width="1488" height="192" rx="20" class="panel"/>
+  <text x="88" y="190" class="stage-number">01</text>
+  <text x="88" y="224" class="stage-title">Chat</text>
+  <text x="88" y="253" class="stage-note">人が直接、文脈を渡す</text>
+
+  <use href="#person" x="431" y="242"/>
+  <text x="431" y="306" text-anchor="middle" class="small">人</text>
+  <path d="M472 220H1245" fill="none" stroke="#287F78" stroke-width="3" marker-end="url(#arrow-teal)"/>
+  <path d="M1245 278H472" fill="none" stroke="#D99B3D" stroke-width="3" marker-end="url(#arrow-amber)"/>
+  <text x="855" y="211" text-anchor="middle" class="flow" fill="#287F78">質問・状況</text>
+  <text x="855" y="302" text-anchor="middle" class="flow" fill="#B37A28">応答</text>
+  <use href="#llm" x="1324" y="246"/>
+  <text x="1324" y="300" text-anchor="middle" font-size="17" font-weight="700">LLM</text>
+  <text x="1324" y="320" text-anchor="middle" class="small">共有モデル</text>
+
+  <rect x="56" y="360" width="1488" height="206" rx="20" class="panel"/>
+  <text x="88" y="402" class="stage-number">02</text>
+  <text x="88" y="436" class="stage-title">Agent</text>
+  <text x="88" y="465" class="stage-note">目的を受けて</text>
+  <text x="88" y="486" class="stage-note">作業を進める</text>
+
+  <use href="#person" x="431" y="459"/>
+  <text x="431" y="523" text-anchor="middle" class="small">人</text>
+  <path d="M472 428H750" fill="none" stroke="#287F78" stroke-width="3" marker-end="url(#arrow-teal)"/>
+  <path d="M750 488H472" fill="none" stroke="#D99B3D" stroke-width="3" marker-end="url(#arrow-amber)"/>
+  <text x="611" y="418" text-anchor="middle" class="flow" fill="#287F78">目的・状況</text>
+  <text x="611" y="512" text-anchor="middle" class="flow" fill="#B37A28">結果</text>
+
+  <use href="#agent" x="837" y="455"/>
+  <text x="837" y="501" text-anchor="middle" font-size="17" font-weight="700">Agent</text>
+  <text x="837" y="522" text-anchor="middle" class="small">計画・ツール使用</text>
+  <path d="M884 428H1245" fill="none" stroke="#287F78" stroke-width="3" marker-end="url(#arrow-teal)"/>
+  <path d="M1245 488H884" fill="none" stroke="#D99B3D" stroke-width="3" marker-end="url(#arrow-amber)"/>
+  <text x="1065" y="418" text-anchor="middle" class="flow" fill="#287F78">必要な文脈で依頼</text>
+  <text x="1065" y="512" text-anchor="middle" class="flow" fill="#B37A28">応答・材料</text>
+  <use href="#llm" x="1324" y="455"/>
+  <text x="1324" y="509" text-anchor="middle" font-size="17" font-weight="700">LLM</text>
+  <text x="1324" y="529" text-anchor="middle" class="small">共有モデル</text>
+
+  <rect x="56" y="584" width="1488" height="240" rx="20" class="panel"/>
+  <text x="88" y="630" class="stage-number">03</text>
+  <text x="88" y="664" class="stage-title">Group of</text>
+  <text x="88" y="693" class="stage-title">agents</text>
+  <text x="88" y="722" class="stage-note">分担し、連携する</text>
+
+  <use href="#person" x="431" y="700"/>
+  <text x="431" y="764" text-anchor="middle" class="small">人</text>
+  <path d="M472 671H684" fill="none" stroke="#287F78" stroke-width="3" marker-end="url(#arrow-teal)"/>
+  <path d="M684 739H472" fill="none" stroke="#D99B3D" stroke-width="3" marker-end="url(#arrow-amber)"/>
+  <text x="578" y="660" text-anchor="middle" class="flow" fill="#287F78">目的</text>
+  <text x="578" y="763" text-anchor="middle" class="flow" fill="#B37A28">統合結果</text>
+
+  <rect x="704" y="620" width="390" height="166" rx="16" fill="#F7FAF9" stroke="#B9D7D1" stroke-width="1.5"/>
+  <text x="899" y="646" text-anchor="middle" font-size="15" font-weight="700">Agent同士が分担・相談</text>
+  <path d="M775 704H1019" fill="none" stroke="#A8C7C1" stroke-width="2" stroke-dasharray="4 5"/>
+  <use href="#agent" x="775" y="695"/>
+  <use href="#agent" x="899" y="695"/>
+  <use href="#agent" x="1023" y="695"/>
+  <text x="775" y="746" text-anchor="middle" class="role">調べる</text>
+  <text x="899" y="746" text-anchor="middle" class="role">まとめる</text>
+  <text x="1023" y="746" text-anchor="middle" class="role">確かめる</text>
+  <text x="899" y="771" text-anchor="middle" class="small">役割を分け、結果を持ち寄る</text>
+
+  <path d="M1094 671H1245" fill="none" stroke="#287F78" stroke-width="3" marker-end="url(#arrow-teal)"/>
+  <path d="M1245 739H1094" fill="none" stroke="#D99B3D" stroke-width="3" marker-end="url(#arrow-amber)"/>
+  <text x="1170" y="660" text-anchor="middle" class="small" fill="#287F78">依頼・文脈</text>
+  <text x="1170" y="763" text-anchor="middle" class="small" fill="#B37A28">生成・判断材料</text>
+  <use href="#llm" x="1324" y="700"/>
+  <text x="1324" y="754" text-anchor="middle" font-size="17" font-weight="700">LLM</text>
+  <text x="1324" y="774" text-anchor="middle" class="small">共有または複数</text>
+
+  <text x="72" y="859" font-size="15" font-weight="600">どの段階でも、人が目的や状況を伝え、結果を確かめる。</text>
+  <text x="72" y="883" class="small">概念図です。実際のAgentはLLMを内包・呼び出すなど、サービスによって構成が異なります。</text>
+</svg>
