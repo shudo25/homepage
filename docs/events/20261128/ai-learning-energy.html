@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AIの学習は、なぜ電力を使うのか | 修道25回</title>
+  <meta name="description" content="言語AIの学習で繰り返される予測と調整、それを支えるGPUや電力を図で説明します。">
+  <link rel="canonical" href="https://shudo25.github.io/homepage/events/20261128/ai-learning-energy.html">
+  <link rel="stylesheet" href="../../common/responsive.css">
+  <style>
+    body { background: #fafafa; padding: 20px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    main { max-width: 1000px; margin: 0 auto; color: #263545; line-height: 1.8; }
+    h1 { color: #2c5aa0; border-bottom: 2px solid #4169e1; padding-bottom: 12px; }
+    h2 { color: #294c64; }
+    section { background: white; padding: 24px; margin: 24px 0; border-left: 4px solid #31816b; border-radius: 5px; }
+    .lead { background: #eaf4fb; padding: 18px 24px; border-radius: 6px; font-size: 1.12em; }
+    .key { color: #174e72; font-weight: bold; }
+    .flow, .resources, .comparison { display: grid; gap: 12px; }
+    .flow { grid-template-columns: repeat(4, minmax(0, 1fr)); margin: 20px 0; }
+    .step { position: relative; border: 1px solid #c5dbe5; border-radius: 8px; background: #f5fafc; padding: 15px; }
+    .step strong { display: block; color: #18536e; font-size: 1.12em; }
+    .step:not(:last-child)::after { content: "→"; position: absolute; right: -13px; top: 35%; color: #31816b; font-size: 1.3em; font-weight: bold; z-index: 1; }
+    .example { background: #fff8e9; border-radius: 6px; padding: 16px 20px; }
+    .example p, .step p, .resource p, .comparison p { margin: 8px 0 0; }
+    .repeat { text-align: center; color: #245c51; font-weight: bold; font-size: 1.15em; }
+    .resources { grid-template-columns: repeat(3, minmax(0, 1fr)); margin: 20px 0; }
+    .resource { border-top: 4px solid #31816b; background: #f3faf7; padding: 16px; }
+    .resource strong { font-size: 1.12em; }
+    .comparison { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .comparison > div { background: #f5f8fc; border-radius: 6px; padding: 16px; }
+    .note { background: #fff8f0; border-left: 4px solid #ff8c00; padding: 14px 18px; }
+    video { display: block; width: 100%; max-width: 800px; height: auto; margin: 0 auto; }
+    a { overflow-wrap: anywhere; }
+    a:focus-visible { outline: 3px solid #4169e1; outline-offset: 3px; }
+    @media (max-width: 700px) {
+      body { padding: 10px; }
+      h1 { font-size: 26px; }
+      section { padding: 18px; }
+      .flow, .resources, .comparison { grid-template-columns: 1fr; }
+      .step:not(:last-child)::after { content: "↓"; right: 18px; top: auto; bottom: -19px; }
+    }
+    @media print {
+      body { padding: 0; background: white; }
+      section { break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+<main>
+  <nav aria-label="ページ案内"><a href="ai-impact.html#llm-heading">← 基調メッセージのLLMの説明へ戻る</a></nav>
+  <h1>AIの学習は、なぜ電力を使うのか</h1>
+  <p>2026年11月28日 修道25回同期会・基調メッセージの補足</p>
+  <div class="lead">
+    <p><strong>AIは、文章をただ倉庫にしまうのではありません。</strong><br>
+      大量の文章で「予測 → 答え合わせ → 調整」を繰り返し、文章のパターンを身につけます。<span class="key">そのたびに膨大な計算が動くので、半導体と電力が必要になります。</span></p>
+  </div>
+
+  <section aria-labelledby="video-heading">
+    <h2 id="video-heading">動画で見る：予測と調整の繰り返し</h2>
+    <video controls preload="metadata" aria-label="AIの学習と電力を説明する動画">
+      <source src="ai-learning-narrated.mp4" type="video/mp4">
+      動画を再生できない場合は<a href="ai-learning-narrated.mp4">こちらから動画を開いてください</a>。
+    </video>
+    <p>約1分11秒。音声はAIで生成したもので、一部に発音が不明瞭な箇所があります。</p>
+  </section>
+
+  <section aria-labelledby="cycle-heading">
+    <h2 id="cycle-heading">1. 学習は「予測して、直す」の繰り返し</h2>
+    <div class="example">
+      <strong>たとえば「今日はとても＿＿」の続きを予測する</strong>
+      <p>AIが「寒い」と予測し、元の文章が「暑い」だったら、その違いを手がかりに、次は元の続きを予測しやすくなるよう内部の数値を少し調整します。</p>
+      <p><small>これは学習の一例です。「寒い」も文脈によっては自然な続きであり、唯一の正解という意味ではありません。実際には文章を細かく区切った単位で予測します。</small></p>
+    </div>
+    <div class="flow" aria-label="学習の流れ">
+      <div class="step"><strong>① 文章を読む</strong><p>大量の文章を、少しずつAIに渡す。</p></div>
+      <div class="step"><strong>② 続きを予測</strong><p>内部の数値を使って、続きの候補を計算する。</p></div>
+      <div class="step"><strong>③ 違いを調べる</strong><p>予測と元の文章を比べ、どの程度ずれたかを計算する。</p></div>
+      <div class="step"><strong>④ 数値を調整</strong><p>ずれを減らす方向を計算し、内部の数値を少し変える。</p></div>
+    </div>
+    <p class="repeat">↻ 別の文章でも、これを何度も繰り返す</p>
+    <p>内部の数値は「パラメータ」と呼ばれます。実際は一つずつ人が直すのではなく、ずれを減らすための計算を機械がまとめて行います。調整の方向を求める計算にも、予測とは別の仕事が必要です。</p>
+  </section>
+
+  <section aria-labelledby="resources-heading">
+    <h2 id="resources-heading">2. なぜGPU・電力・資金が必要？</h2>
+    <p>大きな言語モデルには膨大な数のパラメータがあり、学習では多数の文章に対して、それらを使った計算と調整を繰り返します。一回の操作ではなく、<strong>小さな計算の巨大な積み重ね</strong>です。</p>
+    <div class="resources">
+      <div class="resource"><strong>GPU・メモリー</strong><p>たくさんの計算を並行して進め、数値や途中結果を保持・やり取りするために使います。GPU以外の専用半導体も使われます。</p></div>
+      <div class="resource"><strong>電力・冷却</strong><p>半導体は電気で計算し、その際に熱が出ます。機器を動かし続けるため、冷却や通信・保存の設備にも電力が要ります。</p></div>
+      <div class="resource"><strong>資金</strong><p>半導体やデータセンターの確保、電力、通信、データの準備や人の仕事などに費用がかかります。</p></div>
+    </div>
+    <p class="note"><strong>つながり：</strong>より大きなモデルを、より多くのデータで学習させようとすると、一般に計算量が増えます。大量の計算を限られた時間に終えるには、多くの半導体を並行して動かす必要があり、それが設備・電力への投資につながります。</p>
+  </section>
+
+  <section aria-labelledby="scale-heading">
+    <h2 id="scale-heading">3. 大きくすると、なぜ性能が上がる傾向がある？</h2>
+    <p>より多くの多様な文章から練習できれば、言葉の使われ方や関係のパターンに触れる機会が増えます。モデルの数値を増やせば、より複雑なパターンを表せる余地も広がります。こうしたモデル・データ・計算量をうまく組み合わせることで、予測の誤差が小さくなる傾向が研究で観察されています。</p>
+    <p class="note"><strong>ただし「規模に比例して必ず賢くなる」わけではありません。</strong>データの質や学習方法、モデルとデータのバランスも重要です。予測の改善が、あらゆる問題の正確な回答や事実理解を保証するわけでもありません。</p>
+  </section>
+
+  <section aria-labelledby="use-heading">
+    <h2 id="use-heading">4. 検索・学習・利用は別の仕事</h2>
+    <div class="comparison">
+      <div><strong>検索の準備：探せるようにする</strong><p>ウェブ上のページを集め、見つけるための索引を作ります。検索の仕組みも計算や電力を使います。</p></div>
+      <div><strong>AIの学習：予測の仕方を調整する</strong><p>文章を使って内部の数値を繰り返し調整し、学習済みモデルを作ります。</p></div>
+      <div><strong>AIの利用：学んだ数値で答える</strong><p>学習済みの数値を使って続きや回答を生成します。通常、その会話のたびにモデル自体を学習し直すわけではありません。</p></div>
+      <div><strong>費用の見方</strong><p>大規模な学習全体は、通常、1回の利用よりはるかに多くの計算を要します。一方、利用も電力を使い、利用者や回答が増えれば総量は大きくなります。</p></div>
+    </div>
+    <p>検索サービスにはAIによる回答を組み合わせたものもあります。検索もAIも仕組みや規模によって費用は異なるため、「1回の利用は常に何倍」とは決められません。</p>
+  </section>
+
+  <section aria-labelledby="takeaway-heading">
+    <h2 id="takeaway-heading">一言でいうと</h2>
+    <p class="lead"><strong>大量の文章を使い、予測と調整を膨大な回数繰り返す。<br>その計算を動かすのが半導体で、動かし冷やすのに電力と資金が要る。</strong></p>
+    <p>この仕組みが、AIの話と半導体・電力・投資の話をつなぎます。AIの回答は便利でも、正しいかどうかを確かめる仕事は残ります。</p>
+    <h3>参考資料</h3>
+    <ul>
+      <li><a href="https://arxiv.org/abs/2001.08361">Kaplanほか「Scaling Laws for Neural Language Models」（2020）</a>：モデル・データ・計算量と予測誤差の関係。</li>
+      <li><a href="https://arxiv.org/abs/2203.15556">Hoffmannほか「Training Compute-Optimal Large Language Models」（2022）</a>：モデルと学習データのバランス。</li>
+      <li><a href="https://www.iea.org/reports/energy-and-ai/energy-demand-from-ai">国際エネルギー機関（IEA）「Energy and AI: Energy demand from AI」（2025）</a>：データセンターの計算機・冷却などの電力需要。</li>
+    </ul>
+    <p><a href="ai-impact.html#llm-heading">基調メッセージ「AIは鉄砲か、黒船か、産業革命か？」へ戻る</a></p>
+  </section>
+</main>
+</body>
+</html>
