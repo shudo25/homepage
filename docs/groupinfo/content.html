@@ -303,7 +303,10 @@
           <button class="copy-btn" onclick="copyEmail(this)" data-email="shudo25support@googlegroups.com">コピー</button>
         </span>
       </p>
-      <a href="#TODO_MEIBO" class="gdrive-btn pending" id="meiboLink" target="_blank" rel="noopener">📄 名簿を開く（Googleドライブ）</a>
+      <div class="notice" role="status">
+        <strong>名簿のダウンロードを一時停止しています。</strong>
+        名簿の確認が必要な方は、運営委員会までご連絡ください。
+      </div>
     </div>
     
     <div class="section" id="gatherings">
@@ -516,7 +519,6 @@
 
     // Google Drive 共有リンク設定
     const driveLinks = {
-      meibo: 'https://drive.google.com/file/d/1f2ihydVW6y0Sfjq2uehS50LXFv9MIJNA/view?usp=sharing',
       photos: {
         '2025-11-22': 'https://drive.google.com/drive/folders/1jN5lw1DOChV72RN2mpvTeXt1Z0y-mMor?usp=sharing',
         '2024-11-16': 'https://drive.google.com/drive/folders/1YTI-qC7emnPEW4i7cVpGjCc0PHfqmYGW?usp=sharing',
@@ -548,12 +550,6 @@
     }
 
     function setDriveLinks() {
-      // 名簿リンク
-      const meiboLink = document.getElementById('meiboLink');
-      if (!driveLinks.meibo.startsWith('#TODO')) {
-        meiboLink.href = driveLinks.meibo;
-        meiboLink.classList.remove('pending');
-      }
       // 写真リンク
       document.querySelectorAll('.event-item').forEach(item => {
         const date = item.querySelector('.event-date').textContent.trim();
